@@ -2,66 +2,121 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class PlayerMovementController : MonoBehaviour {
-    public Rigidbody rb;
-    public Camera camera;
+
+    private enum JUMP_STATE  {
+        None,
+        Jumped,
+        DoubleJumped,
+        Flying
+    }
+
+    Rigidbody rb;
     
     Quaternion cameraRotation;
     float cameraY;
     Vector3 moveDirection;
-
-    bool isJump = false;
-    bool isOnTheGround = false;
     Quaternion mouseRotation;
-
+    
     float mouseX;
-    float mouseY;
-    public float jumpHeight = 7.0f;
-    public float mouseRotationSpeed = 2.0f;
-    public float moveSpeed = 5.0f;
-
+    [SerializeField]
+    private float jumpHeight = 7.0f;
+    [SerializeField]
+    private float doubleJumpHeight = 5.0f;
+    [SerializeField]
+    private float mouseRotationSpeed = 2.0f;
+    [SerializeField]
+    private float moveSpeed = 5.0f;
+    [SerializeField]
+    private bool isDoubleJumpEnabled = true;
+    private JUMP_STATE jumpState = JUMP_STATE.None;
+    Vector3 jumpVector;
+    Vector3 doubleJumpVector;
+    int countAction = 0;
+    int layerMask = 1 << Config.Layers.PLAYER;
+    [SerializeField]
+    float speedDowned = 0.5f;
+    Mesh mesh;
+    Bounds bounds;
+    float height;
+    private SimpleTimer st;
     void Start() {
+        layerMask = ~layerMask;
         rb = GetComponent<Rigidbody>();
+        jumpVector = new Vector3(0, jumpHeight, 0);
+        Cursor.lockState = CursorLockMode.Locked;
+        doubleJumpVector  = new Vector3(0, doubleJumpHeight, 0);
+        mesh = GetComponent<MeshFilter>().mesh;
+        bounds = mesh.bounds;
+        height = bounds.extents.y;
     }
 
-    private void OnCollisionEnter(Collision other) {
-        if (other.gameObject.layer == 6) {
-            isJump = false;
-            isOnTheGround = true;
-        }
-    }
 
     void Update () {
         ProcessInputs();
     }
 
     void FixedUpdate() {
-        Move();    
-        Jump();
+        Move();
         Rotate();
-        RotateCamera();
     }
+    
+    bool IsGrounded () {
+        RaycastHit hit;
 
+        Physics.Raycast(transform.position, transform.TransformDirection(Vector3.down), out hit, height + 0.01f, layerMask);
+
+        return hit.collider != null;
+    }
 
     void ProcessInputs () {
         float moveX = Input.GetAxisRaw("Vertical");
         float moveZ = Input.GetAxisRaw("Horizontal");
 
         mouseX += Input.GetAxisRaw("Mouse X");
-        mouseY -= Input.GetAxis("Mouse Y") * 10;
-        mouseY = Mathf.Clamp(mouseY, 0, 45);
 
         mouseRotation = Quaternion.Euler(0, mouseX * mouseRotationSpeed, 0);
 
-        cameraY = Mathf.Lerp(1, 5, mouseY / 45);
+        bool isGrounded = IsGrounded();
 
         Vector3 forwardVector = transform.forward * moveX;
         Vector3 sideVector = transform.right * moveZ;
+        if(Input.GetKeyDown(KeyCode.J))
+        {
+            Action();
+        }
+        if (isGrounded) {
+            moveDirection = forwardVector + sideVector;
+        }
+        else
+        {
+            moveDirection = (forwardVector + sideVector) * speedDowned;
+        }
+        if(Input.GetKeyDown(KeyCode.Space))
+        {
+            Jump();
+        }
+    }
 
-        moveDirection = forwardVector + sideVector;
-
-        if (Input.GetKeyDown("space") && !isJump) {
-            isJump = true;
+    void Action()
+    {
+        if(countAction == 0)
+        {
+            Debug.Log("мяу");
+        }
+        if(countAction == 1)
+        {
+            Debug.Log("укус");
+        }
+        if(countAction == 2)
+        {
+            Debug.Log("когти");
+        }
+        countAction++;
+        if(countAction > 2)
+        {
+            countAction = 0;
         }
     }
 
@@ -71,25 +126,23 @@ public class PlayerMovementController : MonoBehaviour {
         rb.MovePosition(movePosition);
     }
 
-
-
     void Jump () {
-        if (isJump && isOnTheGround) {
-            isOnTheGround = false;
-            Vector3 jumpVector = new Vector3(0, jumpHeight, 0);
 
-            rb.AddForce(jumpVector, ForceMode.Impulse);
+        bool isGrounded = IsGrounded();
+
+        if(isGrounded)
+        {
+            rb.AddForce(jumpVector + moveDirection, ForceMode.Impulse);
+            jumpState = JUMP_STATE.Jumped;
+        }
+        else if(isDoubleJumpEnabled & jumpState == JUMP_STATE.Jumped)
+        {
+            rb.AddForce(doubleJumpVector, ForceMode.Impulse);
+            jumpState = JUMP_STATE.DoubleJumped;
         }
     }
 
     void Rotate () {
         transform.rotation = mouseRotation;
-    }
-
-    void RotateCamera () {
-        Vector3 cameraEuler = camera.transform.rotation.eulerAngles;
-        cameraEuler.x = mouseY;
-        camera.transform.rotation = Quaternion.Euler(cameraEuler);
-        camera.transform.position = new Vector3(camera.transform.position.x, cameraY, camera.transform.position.z);
     }
 }
