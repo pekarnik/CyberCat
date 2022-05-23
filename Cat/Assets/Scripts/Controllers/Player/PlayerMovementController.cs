@@ -37,19 +37,15 @@ public class PlayerMovementController : MonoBehaviour {
     int layerMask = 1 << Config.Layers.PLAYER;
     [SerializeField]
     float speedDowned = 0.5f;
-    Mesh mesh;
-    Bounds bounds;
     float height;
-    private SimpleTimer st;
+
     void Start() {
         layerMask = ~layerMask;
         rb = GetComponent<Rigidbody>();
         jumpVector = new Vector3(0, jumpHeight, 0);
         Cursor.lockState = CursorLockMode.Locked;
         doubleJumpVector  = new Vector3(0, doubleJumpHeight, 0);
-        mesh = GetComponent<MeshFilter>().mesh;
-        bounds = mesh.bounds;
-        height = bounds.extents.y;
+        height = GetComponent<MeshFilter>().mesh.bounds.extents.y;
     }
 
 
