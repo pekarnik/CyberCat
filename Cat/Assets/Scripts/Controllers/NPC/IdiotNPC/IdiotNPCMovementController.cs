@@ -3,13 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class IdiotNPCMovementController : MonoBehaviour {
+public class IdiotNPCMovementController : MonoBehaviour, ResetableGameObject {
     Rigidbody rb;
     
     float cameraY;
     private Vector3 moveDirection;
     private Vector3 lastDirection;
 
+    public GameObject CurrentGameObject {
+        get => gameObject;
+    }
 
     float mouseX;
     [SerializeField]

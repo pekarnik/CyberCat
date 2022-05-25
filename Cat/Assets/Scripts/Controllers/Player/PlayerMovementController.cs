@@ -3,13 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class PlayerMovementController : MonoBehaviour {
+public class PlayerMovementController : MonoBehaviour, ResetableGameObject {
 
     private enum JUMP_STATE  {
         None,
         Jumped,
         DoubleJumped,
         Flying
+    }
+
+    public GameObject CurrentGameObject {
+        get { return gameObject; }
     }
 
     Rigidbody rb;
