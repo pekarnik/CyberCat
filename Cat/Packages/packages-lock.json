@@ -1,12 +1,5 @@
 {
   "dependencies": {
-    "com.leopotam.ecs-threads": {
-      "version": "https://github.com/Leopotam/ecs-threads.git",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "7013912283f2ac7d5b92cc006576fe305b002ffb"
-    },
     "com.leopotam.ecslite": {
       "version": "https://github.com/voody2506/ecslite.git",
       "depth": 0,
@@ -28,12 +21,26 @@
       "dependencies": {},
       "hash": "645d4f27b12020630d4f1e252cb27deec04d2659"
     },
+    "com.leopotam.ecslite.threads": {
+      "version": "https://github.com/Leopotam/ecslite-threads.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "97cc713d932f9e6a7595bff3b1f628cb17b2b07e"
+    },
     "com.leopotam.ecslite.unityeditor": {
       "version": "https://github.com/Leopotam/ecslite-unityeditor.git",
       "depth": 0,
       "source": "git",
       "dependencies": {},
       "hash": "31b0df802def4f8995b7c9421551e6eb3fdab99e"
+    },
+    "com.supremestranger.leoecs-lite-physics": {
+      "version": "https://github.com/supremestranger/leoecs-lite-physics.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "ea0ad960e3268b57964795594a7767305a1fb977"
     },
     "com.unity.collab-proxy": {
       "version": "1.15.16",
