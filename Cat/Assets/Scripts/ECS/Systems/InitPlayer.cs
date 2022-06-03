@@ -12,11 +12,16 @@ namespace Systems {
 
             var movablePool = world.GetPool<Components.Movable>();
             var moveDirectionPool = world.GetPool<Components.MoveDirection>();
+            var cameraLeadPool = world.GetPool<Components.CameraLead>();
 
             movablePool.Add(playerEntity);
             moveDirectionPool.Add(playerEntity);
+            cameraLeadPool.Add(playerEntity);
 
             ref var movableComponent = ref movablePool.Get(playerEntity);
+            ref var cameraLeadComponent = ref cameraLeadPool.Get(playerEntity);
+
+            cameraLeadComponent.leaderTag = "Player";
             
             GameObject player = GameObject.FindGameObjectWithTag("Player");
             movableComponent.rigidbody = player.GetComponent<Rigidbody>();

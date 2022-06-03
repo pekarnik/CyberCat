@@ -1,6 +1,7 @@
 using System;
 using Leopotam.EcsLite;
 using UnityEngine;
+using Voody.UniLeo.Lite;
 
 namespace Client
 {
@@ -19,7 +20,13 @@ namespace Client
             _fixedSystems = new EcsSystems(_world);
             _initSystems = new EcsSystems(_world);
             
+            _initSystems
+                .Add(new Systems.InitPlayer())
+                // .Add(new Systems.InitCamera())
+                .Init();
+            
             _systems
+                .ConvertScene()
                 .Add(new Systems.KeyboardInput())
 #if UNITY_EDITOR
                 .Add(new Leopotam.EcsLite.UnityEditor.EcsWorldDebugSystem())
@@ -27,11 +34,9 @@ namespace Client
                 .Init();
             
             _fixedSystems
+                .ConvertScene()
                 .Add(new Systems.Move())
-                .Init();
-            
-            _initSystems
-                .Add(new Systems.InitPlayer())
+                .Add(new Systems.MoveCamera())
                 .Init();
         }
 
