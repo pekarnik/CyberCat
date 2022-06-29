@@ -9,6 +9,11 @@ namespace Systems {
         {
             EcsWorld world = systems.GetWorld();
 
+            MovableHandler(world);
+            RotateCameraHandler(world);
+        }
+
+        private void MovableHandler (EcsWorld world) {
             var filter = world.Filter<Components.Movable>().Inc<Components.MoveDirection>().End();
             var moveDirectionPool = world.GetPool<Components.MoveDirection>();
 
@@ -18,6 +23,39 @@ namespace Systems {
 
                 moveDirectionComponent.forward = Input.GetAxisRaw("Vertical");
                 moveDirectionComponent.right = Input.GetAxisRaw("Horizontal");
+            }
+        }
+
+        private void RotateCameraHandler (EcsWorld world) {
+            var filter = world.Filter<Components.FollowPlayer>().Inc<Components.RotateCamera>().End();
+            var rotateCameraPool = world.GetPool<Components.RotateCamera>();
+
+            foreach (var entity in filter)
+            {
+                ref var rotateCameraComponent = ref rotateCameraPool.Get(entity);
+
+                float newRotation = rotateCameraComponent.currentRotation;
+
+                if (Input.GetKeyDown(KeyCode.E)) {
+                    newRotation = rotateCameraComponent.currentRotation + 90f;
+
+                    if (newRotation > 270) {
+                        newRotation = 0;
+                    }
+                }
+                
+                if (Input.GetKeyDown(KeyCode.Q)) {
+                    newRotation = rotateCameraComponent.currentRotation - 90f;
+
+                    if (newRotation < 0) {
+                        newRotation = 270;
+                    }
+                }
+
+                if (rotateCameraComponent.currentRotation != newRotation) {
+                    rotateCameraComponent.currentRotation = newRotation;
+                }
+
             }
         }
     }

@@ -7,6 +7,11 @@ namespace Systems {
     sealed class MoveCamera : IEcsInitSystem, IEcsRunSystem
     {
         private int cameraEntity;
+
+        private readonly float FORWARD_ROTATION = 90f;
+        private readonly float RIGHT_ROTATION = 180f;
+        private readonly float LEFT_ROTATION = 0f;
+        private readonly float BACKWARD_ROTATION = 270f;
         
         public void Init(EcsSystems systems)
         {
@@ -16,13 +21,19 @@ namespace Systems {
             
             var followPlayerPool = world.GetPool<Components.FollowPlayer>();
             var cameraLeaderPool = world.GetPool<Components.CameraLead>();
+            var rotateCameraPool = world.GetPool<Components.RotateCamera>();
             
             followPlayerPool.Add(cameraEntity);
-            
+
+            rotateCameraPool.Add(cameraEntity);
+            ref var rotateCameraComponent = ref rotateCameraPool.Get(cameraEntity);
+            rotateCameraComponent.currentRotation = FORWARD_ROTATION;
+
             var filter = world.Filter<Components.CameraLead>().End();
             var cameraLeaderEntity = filter.GetRawEntities()[0];
             var cameraLeaderComponent = cameraLeaderPool.Get(cameraLeaderEntity);
 
+            
             ref var followPlayerComponent = ref followPlayerPool.Get(cameraEntity);
             
             GameObject camera = GameObject.FindGameObjectWithTag("MainCamera");
@@ -39,17 +50,22 @@ namespace Systems {
         {
             EcsWorld world = systems.GetWorld();
 
-            var filter = world.Filter<Components.FollowPlayer>().End();
+            var filter = world.Filter<Components.FollowPlayer>().Inc<Components.RotateCamera>().End();
 
             var followPlayerPool = world.GetPool<Components.FollowPlayer>();
+            var rotateCameraPool = world.GetPool<Components.RotateCamera>();
             
             ref var followPlayerComponent = ref followPlayerPool.Get(cameraEntity);
+            var rotateCameraComponent = rotateCameraPool.Get(cameraEntity);
 
             var leaderPosition = followPlayerComponent.leaderTransform.position + followPlayerComponent.offset;
             var followerPosition = followPlayerComponent.followerTransform.position;
 
             followPlayerComponent.followerTransform.position = Vector3.SmoothDamp(followerPosition, leaderPosition, ref followPlayerComponent.velocity, followPlayerComponent.smoothness);
 
+            if (rotateCameraComponent.currentRotation != followPlayerComponent.followerTransform.rotation.y) {
+                followPlayerComponent.followerTransform.rotation = Quaternion.Euler(60, rotateCameraComponent.currentRotation, 0);
+            };
         }
     }
 }

@@ -13,8 +13,12 @@ namespace Systems {
             
             var followPlayerPool = world.GetPool<Components.FollowPlayer>();
             var cameraLeaderPool = world.GetPool<Components.CameraLead>();
+            var rotateCameraPool = world.GetPool<Components.RotateCamera>();
+
+            Debug.Log(rotateCameraPool);
             
             followPlayerPool.Add(cameraEntity);
+            rotateCameraPool.Add(cameraEntity);
             
             var filter = world.Filter<Components.CameraLead>().End();
             var cameraLeaderEntity = filter.GetRawEntities()[0];
