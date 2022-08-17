@@ -3,8 +3,8 @@ using System;
 
 namespace Components {
     [Serializable]
-    public struct Movable
+    public struct PhysicalObject
     {
-        public float moveSpeed;
+        public Rigidbody rigidbody;
     }
 }

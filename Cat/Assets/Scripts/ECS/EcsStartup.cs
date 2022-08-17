@@ -37,6 +37,7 @@ namespace Client
                 .ConvertScene()
                 .Add(new Systems.Move())
                 .Add(new Systems.MoveCamera())
+                .Add(new Systems.Attack())
                 .Init();
         }
 

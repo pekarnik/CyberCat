@@ -11,10 +11,11 @@ namespace Systems {
 
             MovableHandler(world);
             RotateCameraHandler(world);
+            AttackInputHandler(world);
         }
 
         private void MovableHandler (EcsWorld world) {
-            var filter = world.Filter<Components.Movable>().Inc<Components.MoveDirection>().End();
+            var filter = world.Filter<Components.Movable>().Inc<Components.MoveDirection>().Inc<Components.PhysicalObject>().End();
             var moveDirectionPool = world.GetPool<Components.MoveDirection>();
 
             foreach (var entity in filter)
@@ -35,7 +36,6 @@ namespace Systems {
                 ref var rotateCameraComponent = ref rotateCameraPool.Get(entity);
 
                 float newRotation = rotateCameraComponent.currentRotation;
-
                 if (Input.GetKeyDown(KeyCode.E)) {
                     newRotation = rotateCameraComponent.currentRotation + 90f;
 
@@ -56,6 +56,22 @@ namespace Systems {
                     rotateCameraComponent.currentRotation = newRotation;
                 }
 
+            }
+        }
+        
+        private void AttackInputHandler (EcsWorld world) {
+
+            if (Input.GetKeyDown(KeyCode.F)) {
+                var filter = world.Filter<Components.PhysicalObject>().Inc<Components.Attacker>().End();
+                var attackerPool = world.GetPool<Components.Attacker>();
+                
+                foreach (var entity in filter) {
+                    ref var attackerComponent = ref attackerPool.Get(entity);
+                    
+                    if (!attackerComponent.isAttacked) {
+                        attackerComponent.isAttacked = true;
+                    }
+                }
             }
         }
     }
