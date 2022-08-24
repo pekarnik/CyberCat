@@ -22,6 +22,7 @@ namespace Client
             
             _initSystems
                 .Add(new Systems.InitPlayer())
+                .Add(new Systems.InitNpc())
                 // .Add(new Systems.InitCamera())
                 .Init();
             
@@ -38,6 +39,7 @@ namespace Client
                 .Add(new Systems.Move())
                 .Add(new Systems.MoveCamera())
                 .Add(new Systems.Attack())
+                .Add(new Systems.TriggerArea())
                 .Init();
         }
 
