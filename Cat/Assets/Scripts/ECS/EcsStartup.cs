@@ -37,6 +37,7 @@ namespace Client
             _fixedSystems
                 .ConvertScene()
                 .Add(new Systems.Move())
+                .Add(new Systems.JumpPlayer())
                 .Add(new Systems.MoveCamera())
                 .Add(new Systems.Attack())
                 .Add(new Systems.TriggerArea())

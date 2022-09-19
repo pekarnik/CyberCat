@@ -6,5 +6,6 @@ namespace Components {
     public struct PhysicalObject
     {
         public Rigidbody rigidbody;
+        public MeshFilter meshFilter;
     }
 }

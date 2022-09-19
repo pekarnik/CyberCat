@@ -12,18 +12,23 @@ namespace Systems {
             MovableHandler(world);
             RotateCameraHandler(world);
             AttackInputHandler(world);
+            JumpPlayerHandler(world);
         }
 
         private void MovableHandler (EcsWorld world) {
-            var filter = world.Filter<Components.Movable>().Inc<Components.MoveDirection>().Inc<Components.PhysicalObject>().End();
+            var filter = world.Filter<Components.Movable>().Inc<Components.MoveDirection>().Inc<Components.PhysicalObject>().Inc<Components.JumpPlayer>().End();
             var moveDirectionPool = world.GetPool<Components.MoveDirection>();
+            var jumpPlayerPool = world.GetPool<Components.JumpPlayer>();
 
             foreach (var entity in filter)
             {
                 ref var moveDirectionComponent = ref moveDirectionPool.Get(entity);
+                var jumpPlayerComponent = jumpPlayerPool.Get(entity);
 
-                moveDirectionComponent.forward = Input.GetAxisRaw("Vertical");
-                moveDirectionComponent.right = Input.GetAxisRaw("Horizontal");
+                if (jumpPlayerComponent.isGrounded) {
+                    moveDirectionComponent.forward = Input.GetAxisRaw("Vertical");
+                    moveDirectionComponent.right = Input.GetAxisRaw("Horizontal");
+                }
             }
         }
 
@@ -70,6 +75,21 @@ namespace Systems {
                     
                     if (!attackerComponent.isAttacked) {
                         attackerComponent.isAttacked = true;
+                    }
+                }
+            }
+        }
+
+        private void JumpPlayerHandler (EcsWorld world) {
+            if (Input.GetKeyDown(KeyCode.Space)) {
+                var filter = world.Filter<Components.PhysicalObject>().Inc<Components.JumpPlayer>().End();
+                var jumpPlayerPool = world.GetPool<Components.JumpPlayer>();
+                
+                foreach (var entity in filter) {
+                    ref var jumpPlayerComponent = ref jumpPlayerPool.Get(entity);
+                    
+                    if (!jumpPlayerComponent.isJump && jumpPlayerComponent.isGrounded) {
+                        jumpPlayerComponent.isJump = true;
                     }
                 }
             }
