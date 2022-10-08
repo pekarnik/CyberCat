@@ -19,7 +19,6 @@ namespace Systems {
                 var triggerAreaComponent = triggerAreaPool.Get(entity);
                 var physicalObjectComponent = physicalObjectPool.Get(entity);
 
-
                 var center = physicalObjectComponent.rigidbody.transform.position;
                 var direction = Vector3.forward;
 

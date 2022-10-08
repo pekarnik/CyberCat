@@ -18,16 +18,22 @@ namespace Systems {
         private void MovableHandler (EcsWorld world) {
             var filter = world.Filter<Components.Movable>().Inc<Components.MoveDirection>().Inc<Components.PhysicalObject>().Inc<Components.JumpPlayer>().End();
             var moveDirectionPool = world.GetPool<Components.MoveDirection>();
+            var movablePool = world.GetPool<Components.Movable>();
             var jumpPlayerPool = world.GetPool<Components.JumpPlayer>();
 
             foreach (var entity in filter)
             {
                 ref var moveDirectionComponent = ref moveDirectionPool.Get(entity);
+                ref var movableComponent = ref movablePool.Get(entity);
                 var jumpPlayerComponent = jumpPlayerPool.Get(entity);
 
+                moveDirectionComponent.forward = Input.GetAxisRaw("Vertical");
+                moveDirectionComponent.right = Input.GetAxisRaw("Horizontal");
+
                 if (jumpPlayerComponent.isGrounded) {
-                    moveDirectionComponent.forward = Input.GetAxisRaw("Vertical");
-                    moveDirectionComponent.right = Input.GetAxisRaw("Horizontal");
+                    movableComponent.moveSpeed = Components.Movable.DEFAULT_MOVE_SPEED;
+                } else {
+                    movableComponent.moveSpeed = Components.Movable.JUMPING_MOVE_SPEED;
                 }
             }
         }

@@ -35,7 +35,7 @@ namespace Systems {
             attackerComponent.attackSource = player.transform.Find("AttackSource").transform;
             physicalObjectComponent.rigidbody = player.GetComponent<Rigidbody>();
             physicalObjectComponent.meshFilter = player.GetComponent<MeshFilter>();
-            movableComponent.moveSpeed = 5.0f;
+            movableComponent.moveSpeed = Components.Movable.DEFAULT_MOVE_SPEED;
             jumpPlayerComponent.jumpHeight = 10.0f;
         }
     }

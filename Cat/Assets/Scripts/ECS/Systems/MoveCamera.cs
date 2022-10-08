@@ -12,6 +12,11 @@ namespace Systems {
         private readonly float RIGHT_ROTATION = 180f;
         private readonly float LEFT_ROTATION = 0f;
         private readonly float BACKWARD_ROTATION = 270f;
+
+        private readonly Vector3 FORWARD_OFFSET = new Vector3(-1, 5, 0);
+        private readonly Vector3 RIGHT_OFFSET = new Vector3(0, 5, 1);
+        private readonly Vector3 LEFT_OFFSET = new Vector3(0, 5, -1);
+        private readonly Vector3 BACKWARD_OFFSET = new Vector3(1, 5, 0);
         
         public void Init(EcsSystems systems)
         {
@@ -58,13 +63,26 @@ namespace Systems {
             ref var followPlayerComponent = ref followPlayerPool.Get(cameraEntity);
             var rotateCameraComponent = rotateCameraPool.Get(cameraEntity);
 
+            if (rotateCameraComponent.currentRotation == this.FORWARD_ROTATION) {
+                followPlayerComponent.offset = this.FORWARD_OFFSET;
+            }
+            if (rotateCameraComponent.currentRotation == this.RIGHT_ROTATION) {
+                followPlayerComponent.offset = this.RIGHT_OFFSET;
+            }
+            if (rotateCameraComponent.currentRotation == this.LEFT_ROTATION) {
+                followPlayerComponent.offset = this.LEFT_OFFSET;
+            }
+            if (rotateCameraComponent.currentRotation == this.BACKWARD_ROTATION) {
+                followPlayerComponent.offset = this.BACKWARD_OFFSET;
+            }
+
             var leaderPosition = followPlayerComponent.leaderTransform.position + followPlayerComponent.offset;
             var followerPosition = followPlayerComponent.followerTransform.position;
 
             followPlayerComponent.followerTransform.position = Vector3.SmoothDamp(followerPosition, leaderPosition, ref followPlayerComponent.velocity, followPlayerComponent.smoothness);
 
             if (rotateCameraComponent.currentRotation != followPlayerComponent.followerTransform.rotation.y) {
-                followPlayerComponent.followerTransform.rotation = Quaternion.Euler(60, rotateCameraComponent.currentRotation, 0);
+                followPlayerComponent.followerTransform.rotation = Quaternion.Euler(60, rotateCameraComponent.currentRotation, 0);    
             };
         }
     }
