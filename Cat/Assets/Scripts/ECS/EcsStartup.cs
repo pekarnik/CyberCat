@@ -23,12 +23,14 @@ namespace Client
             _initSystems
                 .Add(new Systems.InitPlayer())
                 .Add(new Systems.InitNpc())
+                .Add(new Systems.InitLight())
                 // .Add(new Systems.InitCamera())
                 .Init();
             
             _systems
                 .ConvertScene()
                 .Add(new Systems.KeyboardInput())
+                .Add(new Systems.DayLight())
 #if UNITY_EDITOR
                 .Add(new Leopotam.EcsLite.UnityEditor.EcsWorldDebugSystem())
 #endif
