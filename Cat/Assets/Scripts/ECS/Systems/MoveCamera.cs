@@ -8,15 +8,18 @@ namespace Systems {
     {
         private int cameraEntity;
 
-        private readonly float FORWARD_ROTATION = 90f;
-        private readonly float RIGHT_ROTATION = 180f;
-        private readonly float LEFT_ROTATION = 0f;
-        private readonly float BACKWARD_ROTATION = 270f;
+        const float CAMERA_HEIGHT = 7f;
+        const float CAMERA_FORWARD_ANGLE = 45f;
 
-        private readonly Vector3 FORWARD_OFFSET = new Vector3(-1, 5, 0);
-        private readonly Vector3 RIGHT_OFFSET = new Vector3(0, 5, 1);
-        private readonly Vector3 LEFT_OFFSET = new Vector3(0, 5, -1);
-        private readonly Vector3 BACKWARD_OFFSET = new Vector3(1, 5, 0);
+        private readonly float FORWARD_ROTATION = 0f;
+        private readonly float RIGHT_ROTATION = 90f;
+        private readonly float LEFT_ROTATION = 270f;
+        private readonly float BACKWARD_ROTATION = 180f;
+
+        private readonly Vector3 FORWARD_OFFSET = new Vector3(0, CAMERA_HEIGHT, -6);
+        private readonly Vector3 RIGHT_OFFSET = new Vector3(-6, CAMERA_HEIGHT, 0);
+        private readonly Vector3 LEFT_OFFSET = new Vector3(6, CAMERA_HEIGHT, 0);
+        private readonly Vector3 BACKWARD_OFFSET = new Vector3(0, CAMERA_HEIGHT, 6);
         
         public void Init(EcsSystems systems)
         {
@@ -42,11 +45,11 @@ namespace Systems {
             ref var followPlayerComponent = ref followPlayerPool.Get(cameraEntity);
             
             GameObject camera = GameObject.FindGameObjectWithTag("MainCamera");
-            camera.transform.rotation = Quaternion.Euler(60, 90, 0);
+            camera.transform.rotation = Quaternion.Euler(CAMERA_FORWARD_ANGLE, 0, 0);
             followPlayerComponent.followerTransform = camera.transform;
             GameObject leader = GameObject.FindGameObjectWithTag(cameraLeaderComponent.leaderTag);
             followPlayerComponent.leaderTransform = leader.transform;
-            followPlayerComponent.offset = new Vector3(-1f, 5f, 0f);
+            followPlayerComponent.offset = new Vector3(0f, CAMERA_HEIGHT, 6f);
             followPlayerComponent.velocity = Vector3.zero;
             followPlayerComponent.smoothness = 0.2f;
         }
@@ -61,7 +64,7 @@ namespace Systems {
             var rotateCameraPool = world.GetPool<Components.RotateCamera>();
             
             ref var followPlayerComponent = ref followPlayerPool.Get(cameraEntity);
-            var rotateCameraComponent = rotateCameraPool.Get(cameraEntity);
+            ref var rotateCameraComponent = ref rotateCameraPool.Get(cameraEntity);
 
             if (rotateCameraComponent.currentRotation == this.FORWARD_ROTATION) {
                 followPlayerComponent.offset = this.FORWARD_OFFSET;
@@ -82,7 +85,7 @@ namespace Systems {
             followPlayerComponent.followerTransform.position = Vector3.SmoothDamp(followerPosition, leaderPosition, ref followPlayerComponent.velocity, followPlayerComponent.smoothness);
 
             if (rotateCameraComponent.currentRotation != followPlayerComponent.followerTransform.rotation.y) {
-                followPlayerComponent.followerTransform.rotation = Quaternion.Euler(60, rotateCameraComponent.currentRotation, 0);    
+                followPlayerComponent.followerTransform.rotation = Quaternion.Euler(CAMERA_FORWARD_ANGLE, rotateCameraComponent.currentRotation, 0);    
             };
         }
     }
