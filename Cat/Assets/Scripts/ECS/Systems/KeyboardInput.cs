@@ -13,6 +13,7 @@ namespace Systems {
             RotateCameraHandler(world);
             AttackInputHandler(world);
             JumpPlayerHandler(world);
+            CameraPositionChangeHandler(world);
         }
 
         private void MovableHandler (EcsWorld world) {
@@ -30,11 +31,7 @@ namespace Systems {
                 moveDirectionComponent.forward = Input.GetAxisRaw("Vertical");
                 moveDirectionComponent.right = Input.GetAxisRaw("Horizontal");
 
-                if (jumpPlayerComponent.isGrounded) {
-                    movableComponent.moveSpeed = Components.Movable.DEFAULT_MOVE_SPEED;
-                } else {
-                    movableComponent.moveSpeed = Components.Movable.JUMPING_MOVE_SPEED;
-                }
+                movableComponent.moveSpeed = Components.Movable.DEFAULT_MOVE_SPEED;
             }
         }
 
@@ -65,6 +62,83 @@ namespace Systems {
 
                 if (rotateCameraComponent.currentRotation != newRotation) {
                     rotateCameraComponent.currentRotation = newRotation;
+                }
+
+            }
+        }
+
+        private void CameraPositionChangeHandler (EcsWorld world) {
+            if (Input.GetKeyDown(KeyCode.Tab)) {
+                var followFilter = world.Filter<Components.FollowPlayer>().Inc<Components.RotateCamera>().End();
+                var staticFilter = world.Filter<Components.StaticCamera>().End();
+                var cameraStateFilter = world.Filter<Components.CameraState>().End();
+                var cameraStatePool = world.GetPool<Components.CameraState>();
+                var followPlayerPool = world.GetPool<Components.FollowPlayer>();
+                var rotateCameraPool = world.GetPool<Components.RotateCamera>();
+                var staticCameraPool = world.GetPool<Components.StaticCamera>();
+
+                foreach (var entity in staticFilter) {
+
+                    var cameraStateComponent = cameraStatePool.Get(entity);
+
+                    if (cameraStateComponent.state == Components.CameraState.CAMERA_STATE.FOLLOW_PLAYER) {
+                        break;
+                    }
+
+                    followPlayerPool.Add(entity);
+                    rotateCameraPool.Add(entity);
+
+                    var cameraLeaderPool = world.GetPool<Components.CameraLead>();
+                    var filter = world.Filter<Components.CameraLead>().End();
+                    var cameraLeaderEntity = filter.GetRawEntities()[0];
+                    var cameraLeaderComponent = cameraLeaderPool.Get(cameraLeaderEntity);
+
+                    ref var followPlayerComponent = ref followPlayerPool.Get(entity);
+                    ref var rotateCameraComponent = ref rotateCameraPool.Get(entity);
+                    var staticCameraComponent = staticCameraPool.Get(entity);
+
+                    GameObject camera = GameObject.FindGameObjectWithTag("MainCamera");
+                    camera.transform.rotation = Quaternion.Euler(Systems.MoveCamera.CAMERA_FORWARD_ANGLE, 0, 0);
+                    followPlayerComponent.followerTransform = staticCameraComponent.cameraTransform;
+                    GameObject leader = GameObject.FindGameObjectWithTag(cameraLeaderComponent.leaderTag);
+                    followPlayerComponent.leaderTransform = leader.transform;
+                    followPlayerComponent.offset = new Vector3(0f, Systems.MoveCamera.CAMERA_HEIGHT, 6f);
+                    followPlayerComponent.velocity = Vector3.zero;
+                    followPlayerComponent.smoothness = 0.2f;
+
+                    staticCameraPool.Del(entity);   
+                }
+
+                foreach (var entity in followFilter) {
+
+                    var cameraStateComponent = cameraStatePool.Get(entity);
+
+                    if (cameraStateComponent.state == Components.CameraState.CAMERA_STATE.STATIC) {
+                        break;
+                    }
+                    
+                    rotateCameraPool.Del(entity);
+                    staticCameraPool.Add(entity);
+
+                    ref var staticCameraComponent = ref staticCameraPool.Get(entity);
+                    var followPlayerComponent = followPlayerPool.Get(entity);
+
+                    staticCameraComponent.cameraStaticPosition = new Vector3(0, 20, 0);
+                    staticCameraComponent.cameraStaticRotation = Quaternion.Euler(90, 0, 0);
+                    staticCameraComponent.alreadyFixed = false;
+                    staticCameraComponent.cameraTransform = followPlayerComponent.followerTransform;
+
+                    followPlayerPool.Del(entity);
+                }
+
+                foreach (var entity in cameraStateFilter) {
+                    ref var cameraStateComponent = ref cameraStatePool.Get(entity);
+
+                    if (cameraStateComponent.state == Components.CameraState.CAMERA_STATE.STATIC) {
+                        cameraStateComponent.state = Components.CameraState.CAMERA_STATE.FOLLOW_PLAYER;
+                    } else {
+                        cameraStateComponent.state = Components.CameraState.CAMERA_STATE.STATIC;
+                    }
                 }
 
             }

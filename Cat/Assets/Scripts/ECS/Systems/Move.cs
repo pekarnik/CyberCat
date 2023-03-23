@@ -22,27 +22,31 @@ namespace Systems {
                 var moveDirectionComponent = moveDirectionPool.Get(entity);
                 var physicalObjectComponent = physicalObjectPool.Get(entity);
 
-                var mainCameraComponent = cameraPool.Get(mainCameraEntity);
-                
+                var isCameraFollowed = cameraPool.Has(mainCameraEntity);
+
                 float moveSpeed = movableComponent.moveSpeed; 
 
-                // ТЕПЕРЬ ХАДЬБА
-
                 Vector3 moveDirection = new Vector3(moveDirectionComponent.right, 0, moveDirectionComponent.forward) * moveSpeed * Time.fixedDeltaTime;
+                if (isCameraFollowed) {
 
-                if (mainCameraComponent.currentRotation == 90f) {
-                    moveDirection = new Vector3(moveDirectionComponent.forward, 0, -moveDirectionComponent.right) * moveSpeed * Time.fixedDeltaTime;
-                }
-                if (mainCameraComponent.currentRotation == 180f) {
-                    moveDirection = new Vector3(-moveDirectionComponent.right, 0, -moveDirectionComponent.forward) * moveSpeed * Time.fixedDeltaTime;
-                }
-                if (mainCameraComponent.currentRotation == 270f) {
-                    moveDirection = new Vector3(-moveDirectionComponent.forward, 0, moveDirectionComponent.right) * moveSpeed * Time.fixedDeltaTime;
+                    var mainCameraComponent = cameraPool.Get(mainCameraEntity);
+                    
+
+                    if (mainCameraComponent.currentRotation == 90f) {
+                        moveDirection = new Vector3(moveDirectionComponent.forward, 0, -moveDirectionComponent.right) * moveSpeed * Time.fixedDeltaTime;
+                    }
+                    if (mainCameraComponent.currentRotation == 180f) {
+                        moveDirection = new Vector3(-moveDirectionComponent.right, 0, -moveDirectionComponent.forward) * moveSpeed * Time.fixedDeltaTime;
+                    }
+                    if (mainCameraComponent.currentRotation == 270f) {
+                        moveDirection = new Vector3(-moveDirectionComponent.forward, 0, moveDirectionComponent.right) * moveSpeed * Time.fixedDeltaTime;
+                    }
+
+                    physicalObjectComponent.rigidbody.MoveRotation(Quaternion.Euler(0, mainCameraComponent.currentRotation, 0));
                 }
 
                 Vector3 movePosition = physicalObjectComponent.rigidbody.position + moveDirection;
                 physicalObjectComponent.rigidbody.MovePosition(movePosition);
-                physicalObjectComponent.rigidbody.MoveRotation(Quaternion.Euler(0, mainCameraComponent.currentRotation, 0));
             }
         }
     }

@@ -12,7 +12,7 @@ namespace Systems {
             var filter = world.Filter<Components.JumpPlayer>().Inc<Components.PhysicalObject>().End();
             var physicalObjectPool = world.GetPool<Components.PhysicalObject>();
             var jumpPlayerPool = world.GetPool<Components.JumpPlayer>();
-
+    
             foreach (var entity in filter)
             {
                 ref var jumpPlayerComponent = ref jumpPlayerPool.Get(entity);

@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.3731152, g: 0.38073796, b: 0.35873365, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311482, g: 0.38073748, b: 0.35873353, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -209,23 +209,31 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6688090948790020096, guid: f83f9b9656e8e429bb3f216d9083c562, type: 3}
       propertyPath: m_Height
-      value: 10.366292
+      value: 5.4610224
       objectReference: {fileID: 0}
     - target: {fileID: 6688090948790020096, guid: f83f9b9656e8e429bb3f216d9083c562, type: 3}
       propertyPath: m_Radius
-      value: 5.183146
+      value: 0.8936506
       objectReference: {fileID: 0}
     - target: {fileID: 6688090948790020096, guid: f83f9b9656e8e429bb3f216d9083c562, type: 3}
       propertyPath: m_Center.x
-      value: -0.38382292
+      value: 0.07619393
       objectReference: {fileID: 0}
     - target: {fileID: 6688090948790020096, guid: f83f9b9656e8e429bb3f216d9083c562, type: 3}
       propertyPath: m_Center.y
-      value: 0.7455309
+      value: 0.85075134
       objectReference: {fileID: 0}
     - target: {fileID: 6688090948790020096, guid: f83f9b9656e8e429bb3f216d9083c562, type: 3}
       propertyPath: m_Center.z
-      value: 3.5769756
+      value: 0.24400568
+      objectReference: {fileID: 0}
+    - target: {fileID: 6688090948790020096, guid: f83f9b9656e8e429bb3f216d9083c562, type: 3}
+      propertyPath: m_Direction
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6688090948790020097, guid: f83f9b9656e8e429bb3f216d9083c562, type: 3}
+      propertyPath: m_UseGravity
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6688090948790020098, guid: f83f9b9656e8e429bb3f216d9083c562, type: 3}
       propertyPath: m_Mesh

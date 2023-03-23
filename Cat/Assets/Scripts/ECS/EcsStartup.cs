@@ -43,6 +43,7 @@ namespace Client
                 .Add(new Systems.MoveCamera())
                 .Add(new Systems.Attack())
                 .Add(new Systems.TriggerArea())
+                .Add(new Systems.StaticCamera())
                 .Init();
         }
 
