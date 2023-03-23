@@ -14,17 +14,17 @@ namespace Systems {
             var triggerAreaPool = world.GetPool<Components.TriggerArea>();
 
             physicalObjectPool.Add(npcEntity);
-            triggerAreaPool.Add(npcEntity);
+            // triggerAreaPool.Add(npcEntity);
 
-            ref var triggerAreaComponent = ref triggerAreaPool.Get(npcEntity);
+            // ref var triggerAreaComponent = ref triggerAreaPool.Get(npcEntity);
             ref var physicalObjectComponent = ref physicalObjectPool.Get(npcEntity);
 
-            GameObject player = GameObject.FindGameObjectWithTag("NPC");
-            physicalObjectComponent.rigidbody = player.GetComponent<Rigidbody>();
+            GameObject npc = GameObject.FindGameObjectWithTag("NPC");
+            physicalObjectComponent.rigidbody = npc.GetComponent<Rigidbody>();
             
-            triggerAreaComponent.angle = 45f;
-            triggerAreaComponent.maxDistance = 10f;
-            triggerAreaComponent.maxRadius = 3f;
+            // triggerAreaComponent.angle = 45f;
+            // triggerAreaComponent.maxDistance = 10f;
+            // triggerAreaComponent.maxRadius = 3f;
         }
     }
 }
