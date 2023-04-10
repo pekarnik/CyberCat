@@ -6,10 +6,12 @@ namespace Components {
     public struct Spawnable
     {
         public GameObject prefab;
-        public string spawnerId;
+        public int spawnerEntity;
         public int spawnInterval;
         public int spawnLimit;
         public bool active;
+
+        public long? lastSpawnedAt;
     }
 
     public struct SpawnableConfig {
