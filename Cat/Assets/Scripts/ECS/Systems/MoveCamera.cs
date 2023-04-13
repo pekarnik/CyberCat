@@ -48,7 +48,7 @@ namespace Systems {
             ref var cameraStateComponent = ref cameraStatePool.Get(cameraEntity);
             
             cameraStateComponent.state = Components.CameraState.CAMERA_STATE.FOLLOW_PLAYER;
-            GameObject camera = GameObject.FindGameObjectWithTag("MainCamera");
+            GameObject camera = GameObject.FindGameObjectWithTag("Camera");
             camera.transform.rotation = Quaternion.Euler(CAMERA_FORWARD_ANGLE, 0, 0);
             followPlayerComponent.followerTransform = camera.transform;
             GameObject leader = GameObject.FindGameObjectWithTag(cameraLeaderComponent.leaderTag);

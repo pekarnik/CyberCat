@@ -97,7 +97,7 @@ namespace Systems {
                     ref var rotateCameraComponent = ref rotateCameraPool.Get(entity);
                     var staticCameraComponent = staticCameraPool.Get(entity);
 
-                    GameObject camera = GameObject.FindGameObjectWithTag("MainCamera");
+                    GameObject camera = GameObject.FindGameObjectWithTag("Camera");
                     camera.transform.rotation = Quaternion.Euler(Systems.MoveCamera.CAMERA_FORWARD_ANGLE, 0, 0);
                     followPlayerComponent.followerTransform = staticCameraComponent.cameraTransform;
                     GameObject leader = GameObject.FindGameObjectWithTag(cameraLeaderComponent.leaderTag);
