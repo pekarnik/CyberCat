@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Assets.Scripts.CameraController
+namespace Assets.Scripts.MonoBehaviours.CameraController
 {
     public class WallVisionComponent : MonoBehaviour
     {

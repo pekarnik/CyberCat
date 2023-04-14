@@ -1,9 +1,9 @@
-﻿using Cinemachine;
+﻿using Assets.Scripts.Extensions;
+
+using Cinemachine;
 using UnityEngine;
 
-using Assets.Scripts.Extensions;
-
-namespace Assets.Scripts.CameraController
+namespace Assets.Scripts.MonoBehaviours.CameraController
 {
     [RequireComponent(typeof(CinemachineVirtualCamera))]
     public class PlayerFollowingCamera : MonoBehaviour
