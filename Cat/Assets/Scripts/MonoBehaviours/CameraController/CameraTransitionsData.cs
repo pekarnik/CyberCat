@@ -5,6 +5,6 @@ namespace Assets.Scripts.MonoBehaviours.CameraController
     public static class CameraTransitionsData
     {
         public static int CountOfRoomCollidersPlayerCrossed;
-        public static CinemachineVirtualCamera NextTransitionCamera;
+        public static CameraTransition NextTransitionCamera;
     }
 }

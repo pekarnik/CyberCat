@@ -13,6 +13,8 @@ namespace Assets.Scripts.MonoBehaviours.CameraController
         [SerializeField] private CinemachineVirtualCamera _roomCamera;
         [SerializeField] private CinemachineBrain _mainCamera;
 
+        public CinemachineVirtualCamera RoomCamera => _roomCamera;
+
         private void Awake()
         {
             _roomCamera.IfNullLogError();
@@ -43,7 +45,7 @@ namespace Assets.Scripts.MonoBehaviours.CameraController
             // камеру нужно будет переключиться при выходе из коллайдера комнаты
             else
             {
-                CameraTransitionsData.NextTransitionCamera = _roomCamera;
+                CameraTransitionsData.NextTransitionCamera = this;
             }
 
             CameraTransitionsData.CountOfRoomCollidersPlayerCrossed++;
@@ -66,25 +68,26 @@ namespace Assets.Scripts.MonoBehaviours.CameraController
             {
                 // Если игрок вышел из предыдущего коллайдера комнаты,
                 // то активируется камера следующего коллайдера комнаты
-                if (!_roomCamera.Equals(CameraTransitionsData.NextTransitionCamera))
+                if (!_roomCamera.Equals(CameraTransitionsData.NextTransitionCamera.RoomCamera))
                 {
-                    SetActiveCamera(CameraTransitionsData.NextTransitionCamera);
-                    HideWalls(true);
+                    SetActiveCamera(CameraTransitionsData.NextTransitionCamera.RoomCamera);
+                    HideWalls(false);
+                    CameraTransitionsData.NextTransitionCamera.HideWalls(true);
                 }
             }
 
             CameraTransitionsData.CountOfRoomCollidersPlayerCrossed--;
         }
 
+        public void HideWalls(bool value)
+        {
+            _wallVisionComponent.HideWalls(value);
+        }
+
         private void SetActiveCamera(CinemachineVirtualCamera camera)
         {
             _mainCamera.ActiveVirtualCamera.Priority = 10;
             camera.Priority = 50;
-        }
-
-        private void HideWalls(bool value)
-        {
-            _wallVisionComponent.HideWalls(value);
         }
 
         private PlayerFollowingCamera _playerFollowingCamera;
