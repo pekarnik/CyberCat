@@ -4,13 +4,13 @@ namespace Assets.Scripts.MonoBehaviours.CameraController
 {
     public class WallVisionComponent : MonoBehaviour
     {
-        [SerializeField] private GameObject[] _hidableWalls;
+        [SerializeField] private MeshRenderer[] _hidableWalls;
 
         public void HideWalls(bool value)
         {
             foreach(var wall in _hidableWalls)
             {
-                wall.SetActive(!value);
+                wall.enabled = !value;
             }
         }
 
