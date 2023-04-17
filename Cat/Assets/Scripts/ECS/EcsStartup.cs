@@ -15,6 +15,8 @@ namespace Client
 
         void Start()
         {
+
+            Debug.Log("ECS STARTUP");
             _world = new EcsWorld();
             _systems = new EcsSystems(_world);
             _fixedSystems = new EcsSystems(_world);
@@ -22,7 +24,7 @@ namespace Client
             
             _initSystems
                 .Add(new Systems.InitPlayer())
-                .Add(new Systems.InitNpc())
+                // .Add(new Systems.InitNpc())
                 .Add(new Systems.InitLight())
                 // .Add(new Systems.InitCamera())
                 .Init();
@@ -39,12 +41,12 @@ namespace Client
             _fixedSystems
                 .ConvertScene()
                 .Add(new Systems.Move())
-                .Add(new Systems.Spawn())
+                // .Add(new Systems.Spawn())
                 .Add(new Systems.JumpPlayer())
-                .Add(new Systems.MoveCamera())
+                // .Add(new Systems.MoveCamera())
                 .Add(new Systems.Attack())
                 .Add(new Systems.TriggerArea())
-                .Add(new Systems.StaticCamera())
+                // .Add(new Systems.StaticCamera())
                 .Init();
         }
 

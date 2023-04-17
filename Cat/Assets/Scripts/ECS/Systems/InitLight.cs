@@ -21,8 +21,8 @@ namespace Systems
             Transform directionalLightTransform = GameObject.FindGameObjectWithTag("GlobalLight").transform;
             lightRotatorEntity.lightTransform = directionalLightTransform;
             lightRotatorEntity.timeToEnd = 5f * 60;
-            lightRotatorEntity.startAngle = 0f;
-            lightRotatorEntity.endAngle = 180f;
+            lightRotatorEntity.startAngle = 45f;
+            lightRotatorEntity.endAngle = 135f;
         }
 
     }
