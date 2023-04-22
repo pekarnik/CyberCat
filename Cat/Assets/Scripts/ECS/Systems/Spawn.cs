@@ -4,6 +4,7 @@ using UnityEngine;
 using Utils;
 using System.Collections.Generic;
 using System;
+using System.Linq;
 
 namespace Systems {
 
@@ -12,18 +13,12 @@ namespace Systems {
         private SpawnableConfig[] spawnables = {
             new SpawnableConfig(
                 "Prefabs/Enemies/Enemy",
-                "spawner_init",
+                "SPAWNER_1",
+                "SPAWNER_1_PATH",
                 2,
-                0,
+                1,
                 true
             )
-        };
-
-        private Dictionary<int, Vector3> sideOffsets = new Dictionary<int, Vector3>{
-            {0, new Vector3(3, 1, 0)},
-            {1, new Vector3(-3, 1, 0)},
-            {2, new Vector3(0, 1, 3)},
-            {3, new Vector3(0, 1, -3)},
         };
 
         private Dictionary<string, int> spawners = new Dictionary<string, int>();
@@ -34,6 +29,7 @@ namespace Systems {
             var spawnablePool = world.GetPool<Components.Spawnable>();
             var spawnerFilter = world.Filter<Components.Spawner>().End();
             var spawnerPool = world.GetPool<Components.Spawner>();
+
             foreach (var spawnerEntity in spawnerFilter) {
                 var spawnerComponent = spawnerPool.Get(spawnerEntity);
                 if (!spawners.ContainsKey(spawnerComponent.spawnerId)) {
@@ -47,13 +43,23 @@ namespace Systems {
                 spawnablePool.Add(entity);
 
                 ref var spawnableComponent = ref spawnablePool.Get(entity);
+                GameObject spawnerPath = GameObject.Find(entry.spawnerPathComponentName);
+                List<Transform> spawnerPathPoints = spawnerPath.GetComponentsInChildren<Transform>().ToList();
+                spawnerPathPoints.RemoveAt(0);
+                List<Vector3> points = new List<Vector3>();
+                
+                foreach(Transform child in spawnerPathPoints) {
+                    points.Add(child.position);
+                }
                 
                 spawners.TryGetValue(entry.spawnerId, out int spawnerEntity);
-                spawnableComponent.active = entry.active;
-                spawnableComponent.prefab = (GameObject) Resources.Load(entry.prefabLocation);
+                ref var spawnerComponent = ref spawnerPool.Get(spawnerEntity);
+                spawnerComponent.active = entry.active;
+                spawnerComponent.prefab = (GameObject) Resources.Load(entry.prefabLocation);
+                spawnableComponent.navigationPoints = points.ToArray();
                 spawnableComponent.spawnerEntity = spawnerEntity;
-                spawnableComponent.spawnInterval = entry.spawnInterval;
-                spawnableComponent.spawnLimit = entry.spawnLimit;
+                spawnerComponent.spawnInterval = entry.spawnInterval;
+                spawnerComponent.spawnLimit = entry.spawnLimit;
                 spawnableComponent.lastSpawnedAt = null;
             }
         }
@@ -67,19 +73,18 @@ namespace Systems {
 
             foreach (var entity in filter) {
                 ref var spawnableComponent = ref spawnablePool.Get(entity);
+                ref var spawnerComponent = ref spawnerPool.Get(spawnableComponent.spawnerEntity);
 
-                bool ableToSpawn = (DateTimeOffset.UtcNow.ToUnixTimeSeconds() - spawnableComponent.lastSpawnedAt > spawnableComponent.spawnInterval) || spawnableComponent.lastSpawnedAt == null;
+                bool ableToSpawn = ((DateTimeOffset.UtcNow.ToUnixTimeSeconds() - spawnableComponent.lastSpawnedAt > spawnerComponent.spawnInterval)
+                    || spawnableComponent.lastSpawnedAt == null)
+                    && (spawnerComponent.currentSpawned < spawnerComponent.spawnLimit && spawnerComponent.spawnLimit > 0);
 
                 if (ableToSpawn) {
-                    var spawnerComponent = spawnerPool.Get(spawnableComponent.spawnerEntity);
-                    
-                    int side = UnityEngine.Random.Range(0, 4);
-
-                    sideOffsets.TryGetValue(side, out Vector3 sideOffset);
-
-                    Vector3 targetSpawnPoint = spawnerComponent.transform.position + sideOffset;
-                    GameObject.Instantiate(spawnableComponent.prefab, targetSpawnPoint, Quaternion.Euler(0, 0, 0));
-
+                    Vector3 targetSpawnPoint = spawnerComponent.transform.position;                    
+                    GameObject spawnedObject = GameObject.Instantiate(spawnerComponent.prefab, targetSpawnPoint, Quaternion.Euler(0, 0, 0));
+                    NpcMovementController agent = spawnedObject.GetComponent<NpcMovementController>();
+                    agent.SetPositions(spawnableComponent.navigationPoints);
+                    spawnerComponent.currentSpawned++;
                     spawnableComponent.lastSpawnedAt = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
                 }
             }

@@ -9,12 +9,16 @@ public class NpcMovementController : MonoBehaviour
 
     NavMeshAgent agent;
 
-    Vector3[] availablePosition = {  new Vector3(0, 1, 0), new Vector3(43, 1, 0), new Vector3(22, 1, -43) };
+    Vector3[] availablePosition = {};
     int positionIndex = 0;
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
         agent.destination = availablePosition[0];
+    }
+
+    public void SetPositions(Vector3[] positions) {
+        availablePosition = positions;
     }
 
     // Update is called once per frame
