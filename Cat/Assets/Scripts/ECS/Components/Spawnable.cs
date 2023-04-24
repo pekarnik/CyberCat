@@ -7,7 +7,7 @@ namespace Components {
     {
         public int spawnerEntity;
 
-        public Vector3[] navigationPoints;
+        public PathPointModel[] navigationPoints;
 
         public long? lastSpawnedAt;
     }

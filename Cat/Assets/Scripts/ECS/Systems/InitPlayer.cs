@@ -1,6 +1,7 @@
 using Client;
 using Leopotam.EcsLite;
 using UnityEngine;
+using 
 
 namespace Systems {
     sealed class InitPlayer : IEcsInitSystem {
@@ -37,9 +38,6 @@ namespace Systems {
             physicalObjectComponent.meshFilter = player.GetComponent<MeshFilter>();
             movableComponent.moveSpeed = Components.Movable.DEFAULT_MOVE_SPEED;
             jumpPlayerComponent.jumpHeight = 10.0f;
-
-            var frigde = GameObject.FindObjectOfType<Assets.Scripts.MonoBehaviours.Entities.Fridge.Fridge>();
-            frigde.GetProduct();
         }
     }
 }

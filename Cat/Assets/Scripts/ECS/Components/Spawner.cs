@@ -7,9 +7,9 @@ namespace Components {
     {
         public Transform transform;
         public string spawnerId;
-        public string spawnerPathComponent;
+        public GameObject spawnerPathObject;
 
-        public GameObject prefab;
+        public GameObject spawnObject;
 
         public int spawnInterval;
 

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4176481740944181889}
   - component: {fileID: 2166564891051359819}
   - component: {fileID: 707270663388291793}
-  - component: {fileID: 707270663388291797}
+  - component: {fileID: 4665900957355897835}
   m_Layer: 0
   m_Name: fridge
   m_TagString: Untagged
@@ -99,7 +99,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 15.599693, y: 6.0964074, z: 2.0705771}
   m_Center: {x: 4.7062387, y: -2.0094473, z: 0.010834468}
---- !u!114 &707270663388291797
+--- !u!114 &4665900957355897835
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -108,11 +108,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 365305291649933214}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 618afaca1225bf542901ecdc6c38cea5, type: 3}
+  m_Script: {fileID: 11500000, guid: d4080ecb978f74d7f95e26b10c1b27d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxProductCount: 10
-  _currentProductCount: 10
+  maxAvailableInteractions: 10
 --- !u!1 &707270662235090526
 GameObject:
   m_ObjectHideFlags: 0
@@ -223,7 +222,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 707270663094616093}
-  - component: {fileID: 707270663094616092}
+  - component: {fileID: 3124275515408604673}
   m_Layer: 5
   m_Name: ProductCount
   m_TagString: Untagged
@@ -255,7 +254,7 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &707270663094616092
+--- !u!114 &3124275515408604673
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -264,7 +263,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 707270663094616090}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9460c196edcb57443b364cd5c3e3d33e, type: 3}
+  m_Script: {fileID: 11500000, guid: eaafd4c41d5c64fd1bd48f422cc3df5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _currentProductCountText: {fileID: 707270664077068815}

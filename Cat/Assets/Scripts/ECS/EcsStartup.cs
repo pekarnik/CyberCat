@@ -16,7 +16,6 @@ namespace Client
         void Start()
         {
 
-            Debug.Log("ECS STARTUP");
             _world = new EcsWorld();
             _systems = new EcsSystems(_world);
             _fixedSystems = new EcsSystems(_world);

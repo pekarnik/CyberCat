@@ -3,9 +3,9 @@ using Assets.Scripts.Extensions;
 using TMPro;
 using UnityEngine;
 
-namespace Assets.Scripts.MonoBehaviours.Entities.Fridge
+namespace Assets.Scripts.Controllers.Objects.Fridge
 {
-    public class FridgeView : MonoBehaviour
+    public class InteractiveFridgeView : MonoBehaviour
     {
         [SerializeField] private TextMeshProUGUI _currentProductCountText;
         [SerializeField] private TextMeshProUGUI _maxProductCountText;
