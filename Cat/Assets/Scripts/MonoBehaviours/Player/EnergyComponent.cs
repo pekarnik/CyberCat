@@ -59,7 +59,7 @@ namespace Assets.Scripts.MonoBehaviours.Player
 
             if (hittedCount <= 0) return;
 
-            if (!hitted[0].TryGetComponent<ChargableItem>(out var chargableItem)) return;
+            if (!hitted[0].TryGetComponent<ChargeableItem>(out var chargableItem)) return;
 
             if(chargableItem.CanBeCharged())
             {

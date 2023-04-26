@@ -3,7 +3,7 @@ using UnityEngine;
 namespace Assets.Scripts.MonoBehaviours.Player
 {
     [RequireComponent(typeof(MeshRenderer))]
-    public class ChargableItem : MonoBehaviour
+    public class ChargeableItem : MonoBehaviour
     {
         [SerializeField] private Material _chargedMaterial;
 
