@@ -36,10 +36,8 @@ namespace Assets.Scripts.MonoBehaviours.Player
             {
                 _isEnergyButtonPressedInPreviousMoment = true;
 
-                if (_currentEnergy > 0)
-                {
-                    ChargeNearbySubject();
-                }
+                ChargeOrDischargeNearbySubject();
+                
             }
             else if(!isEnergyButtonPressedNow)
             {
@@ -47,7 +45,7 @@ namespace Assets.Scripts.MonoBehaviours.Player
             }
         }
 
-        private void ChargeNearbySubject()
+        private void ChargeOrDischargeNearbySubject()
         {
             Collider[] hitted = new Collider[50];
 
@@ -59,11 +57,16 @@ namespace Assets.Scripts.MonoBehaviours.Player
 
             if (hittedCount <= 0) return;
 
-            if (!hitted[0].TryGetComponent<ChargeableItem>(out var chargableItem)) return;
+            if (!hitted[0].TryGetComponent<ChargeableItem>(out var chargeableItem)) return;
 
-            if(chargableItem.CanBeCharged())
+            if(chargeableItem.IsCharged())
             {
-                chargableItem.Charge();
+                chargeableItem.Discharge();
+                ChangeEnergyCount(1);
+            }
+            else if(_currentEnergy > 0)
+            {
+                chargeableItem.Charge();
                 ChangeEnergyCount(-1);
             }
         }

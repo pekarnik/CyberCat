@@ -5,6 +5,7 @@ namespace Assets.Scripts.MonoBehaviours.Player
     [RequireComponent(typeof(MeshRenderer))]
     public class ChargeableItem : MonoBehaviour
     {
+        [SerializeField] private Material _normalMaterial;
         [SerializeField] private Material _chargedMaterial;
 
         private void Start()
@@ -20,10 +21,15 @@ namespace Assets.Scripts.MonoBehaviours.Player
             _renderer.material = _chargedMaterial;
         }
 
-        public bool CanBeCharged()
+        public void Discharge()
         {
-            return !_isCharged;
+            if (!_isCharged) return;
+
+            _isCharged = false;
+            _renderer.material = _normalMaterial;
         }
+
+        public bool IsCharged() => _isCharged;
 
         private MeshRenderer _renderer;
 
