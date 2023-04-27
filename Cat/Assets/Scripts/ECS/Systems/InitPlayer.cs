@@ -1,7 +1,6 @@
 using Client;
 using Leopotam.EcsLite;
 using UnityEngine;
-using 
 
 namespace Systems {
     sealed class InitPlayer : IEcsInitSystem {
