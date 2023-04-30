@@ -1,4 +1,5 @@
 using System;
+using Assets.Scripts.ECS.Systems;
 using Leopotam.EcsLite;
 using UnityEngine;
 using Voody.UniLeo.Lite;
@@ -44,6 +45,7 @@ namespace Client
                 .Add(new Systems.JumpPlayer())
                 // .Add(new Systems.MoveCamera())
                 .Add(new Systems.Attack())
+                .Add(new PlayerAnimationSystem())
                 .Add(new Systems.TriggerArea())
                 // .Add(new Systems.StaticCamera())
                 .Init();
