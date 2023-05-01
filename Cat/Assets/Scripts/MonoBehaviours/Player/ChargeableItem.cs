@@ -8,6 +8,37 @@ namespace Assets.Scripts.MonoBehaviours.Player
         [SerializeField] private Material _normalMaterial;
         [SerializeField] private Material _chargedMaterial;
 
+        [SerializeField] private States _currentState;
+        public States CurrentState => _currentState;
+
+        public enum States
+        {
+            /// <summary>
+            /// Нормальное состояние
+            /// </summary>
+            Normal,
+
+            /// <summary>
+            /// Заряжен
+            /// </summary>
+            Charged,
+
+            /// <summary>
+            /// В процессе захвата
+            /// </summary>
+            InProgressOfCapturing,
+
+            /// <summary>
+            /// Захват приостановлен
+            /// </summary>
+            CaptureSuspended,
+
+            /// <summary>
+            /// Захвачен
+            /// </summary>
+            Captured
+        }
+
         private void Start()
         {
             _renderer = GetComponent<MeshRenderer>();
@@ -15,24 +46,22 @@ namespace Assets.Scripts.MonoBehaviours.Player
 
         public void Charge()
         {
-            if (_isCharged) return;
+            if (_currentState == States.Charged) return;
 
-            _isCharged = true;
+            _currentState = States.Charged;
+
             _renderer.material = _chargedMaterial;
         }
 
         public void Discharge()
         {
-            if (!_isCharged) return;
+            if (_currentState != States.Charged) return;
 
-            _isCharged = false;
+            _currentState = States.Normal;
+
             _renderer.material = _normalMaterial;
         }
 
-        public bool IsCharged() => _isCharged;
-
         private MeshRenderer _renderer;
-
-        private bool _isCharged;
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using Assets.Scripts.ECS.Systems;
 using Leopotam.EcsLite;
+using Leopotam.EcsLite.Di;
 using UnityEngine;
 using Voody.UniLeo.Lite;
 
@@ -8,6 +9,7 @@ namespace Client
 {
     sealed class EcsStartup : MonoBehaviour
     {
+        [SerializeField] private Canvas _userInterface;
 
         private EcsWorld _world;
         private EcsSystems _systems;
@@ -33,6 +35,7 @@ namespace Client
                 .ConvertScene()
                 .Add(new Systems.KeyboardInput())
                 .Add(new Systems.DayLight())
+                .Add(new UserInterfaceHideSystem())
 #if UNITY_EDITOR
                 .Add(new Leopotam.EcsLite.UnityEditor.EcsWorldDebugSystem())
 #endif
@@ -49,6 +52,8 @@ namespace Client
                 .Add(new Systems.TriggerArea())
                 // .Add(new Systems.StaticCamera())
                 .Init();
+
+            _systems.Inject(_userInterface);
         }
 
         void Update()

@@ -29,6 +29,13 @@ namespace Assets.Scripts.MonoBehaviours.Player
             SetEnergyInViewIfViewNotNull();
         }
 
+        private void Awake()
+        {
+            CheckForNull();
+            CheckValuesForCorrectness();
+            SetEnergyInViewIfViewNotNull();
+        }
+
         private void Update()
         {
             bool isEnergyButtonPressedNow = Input.GetKey(KeyCode.E);
@@ -47,6 +54,8 @@ namespace Assets.Scripts.MonoBehaviours.Player
 
         private void ChargeOrDischargeNearbySubject()
         {
+            if (!_energyView.gameObject.activeSelf) return;
+
             Collider[] hitted = new Collider[50];
 
             var hittedCount = Physics.OverlapSphereNonAlloc(
@@ -59,7 +68,7 @@ namespace Assets.Scripts.MonoBehaviours.Player
 
             if (!hitted[0].TryGetComponent<ChargeableItem>(out var chargeableItem)) return;
 
-            if(chargeableItem.IsCharged())
+            if(chargeableItem.CurrentState == ChargeableItem.States.Charged)
             {
                 chargeableItem.Discharge();
                 ChangeEnergyCount(1);
@@ -69,13 +78,6 @@ namespace Assets.Scripts.MonoBehaviours.Player
                 chargeableItem.Charge();
                 ChangeEnergyCount(-1);
             }
-        }
-
-        private void Awake()
-        {
-            CheckForNull();
-            CheckValuesForCorrectness();
-            SetEnergyInViewIfViewNotNull();
         }
 
         private void SetEnergyInViewIfViewNotNull()
