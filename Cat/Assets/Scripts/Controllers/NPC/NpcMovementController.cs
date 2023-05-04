@@ -16,7 +16,9 @@ public class NpcMovementController : MonoBehaviour
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
-        agent.destination = availablePosition[0].position;
+        if (availablePosition.Length > 0) {
+            agent.destination = availablePosition[0].position;
+        }
     }
 
     public void SetPositions(PathPointModel[] positions) {
@@ -26,6 +28,9 @@ public class NpcMovementController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (availablePosition.Length == 0) {
+            return;
+        }
         if (standsAt > 0) {
             standsAt -= Time.deltaTime;
 

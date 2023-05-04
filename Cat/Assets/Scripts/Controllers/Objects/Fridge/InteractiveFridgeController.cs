@@ -1,4 +1,6 @@
 using UnityEngine;
+using System.Linq;
+using EventManager;
 
 namespace Assets.Scripts.Controllers.Objects.Fridge {
 
@@ -13,6 +15,10 @@ namespace Assets.Scripts.Controllers.Objects.Fridge {
                 _view?.UpdateCurrentProductCount(currentAvailableInteractions);
                 _view?.UpdateMaxProductCount(maxAvailableInteractions);
         }
+
+        // void DayTimeChanged(DayTimeState state) {
+        //     Debug.Log(state);
+        // }
 
         private InteractiveFridgeView _view;
 

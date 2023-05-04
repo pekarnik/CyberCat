@@ -18,11 +18,14 @@ namespace Systems {
                     Vector3 attackSource = attackerComponent.attackSource.position;
 
                     RaycastHit hit;
-                    Physics.Raycast(attackSource, Vector3.right, out hit, 1f, ~layerMask);
-                    Debug.DrawRay(attackSource, Vector3.right, Color.red);
+                    Physics.Raycast(attackSource, Vector3.forward, out hit, 5f, ~layerMask);
 
-                    if (hit.transform?.gameObject?.layer == Config.Layers.TERRAIN) {
-                        Debug.Log("Кусь");
+                    if (hit.transform?.gameObject?.layer == Config.Layers.ENEMY) {
+                        NpcHealthController health = hit.transform?.gameObject.GetComponent<NpcHealthController>();
+
+                        if (health != null) {
+                            health.DecreaseHealth();
+                        }
                     }
 
                     attackerComponent.isAttacked = false;

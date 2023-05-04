@@ -6,5 +6,6 @@ namespace Components {
     public struct DayTime
     {
         public float currentTime;
+        public float cycleDuration;
     }
 }

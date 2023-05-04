@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using System.Collections.Generic;
 
 namespace Components {
     [Serializable]
@@ -18,5 +19,9 @@ namespace Components {
         public bool active;
 
         public int currentSpawned;
+
+        public DayTimeState activePhase;
+
+        public List<GameObject> spawnedObjects;
     }
 }

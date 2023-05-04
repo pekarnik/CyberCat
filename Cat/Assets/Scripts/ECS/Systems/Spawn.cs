@@ -5,6 +5,7 @@ using Utils;
 using System.Collections.Generic;
 using System;
 using System.Linq;
+using EventManager;
 
 namespace Systems {
 
@@ -42,7 +43,7 @@ namespace Systems {
                 
                 spawnablePool.Add(entity);
                 spawners.TryGetValue(entry.spawnerId, out int spawnerEntity);
-                ref var spawnerComponent = ref spawnerPool.Get(spawnerEntity);
+                var spawnerComponent = spawnerPool.Get(spawnerEntity);
                 ref var spawnableComponent = ref spawnablePool.Get(entity);
 
                 GameObject spawnerPath = spawnerComponent.spawnerPathObject;
@@ -60,12 +61,8 @@ namespace Systems {
 
                 var points = sortedPathPoints;
                 
-                spawnerComponent.active = entry.active;
-                spawnerComponent.spawnObject = (GameObject) Resources.Load(entry.prefabLocation);
                 spawnableComponent.navigationPoints = points.ToArray();
                 spawnableComponent.spawnerEntity = spawnerEntity;
-                spawnerComponent.spawnInterval = entry.spawnInterval;
-                spawnerComponent.spawnLimit = entry.spawnLimit;
                 spawnableComponent.lastSpawnedAt = null;
             }
         }
@@ -81,18 +78,32 @@ namespace Systems {
                 ref var spawnableComponent = ref spawnablePool.Get(entity);
                 ref var spawnerComponent = ref spawnerPool.Get(spawnableComponent.spawnerEntity);
 
-                bool ableToSpawn = ((DateTimeOffset.UtcNow.ToUnixTimeSeconds() - spawnableComponent.lastSpawnedAt > spawnerComponent.spawnInterval)
-                    || spawnableComponent.lastSpawnedAt == null)
-                    && (spawnerComponent.currentSpawned < spawnerComponent.spawnLimit && spawnerComponent.spawnLimit > 0);
+                bool isDayTimePhaseActive = (spawnerComponent.activePhase == DayTimeEventManager.CurrentDayTimeState || spawnerComponent.activePhase == DayTimeState.NONE);
+                bool isSpawnLimitReached = ((spawnerComponent.currentSpawned < spawnerComponent.spawnLimit && spawnerComponent.spawnLimit > 0) || spawnerComponent.spawnLimit == 0);
+                bool isSpawnTimeoutReached = ((DateTimeOffset.UtcNow.ToUnixTimeSeconds() - spawnableComponent.lastSpawnedAt > spawnerComponent.spawnInterval)
+                    || spawnableComponent.lastSpawnedAt == null);
+
+                bool ableToSpawn = isSpawnTimeoutReached && isSpawnLimitReached && isDayTimePhaseActive && spawnerComponent.active;
+
+                bool shouldDespawned = DayTimeEventManager.PreviousDayTimeState == spawnerComponent.activePhase 
+                    && DayTimeEventManager.CurrentDayTimeState != spawnerComponent.activePhase && spawnerComponent.currentSpawned > 0;
 
                 if (ableToSpawn) {
                     Vector3 targetSpawnPoint = spawnerComponent.transform.position;            
                     GameObject spawnedObject = GameObject.Instantiate(spawnerComponent.spawnObject, targetSpawnPoint, Quaternion.Euler(0, 0, 0));
                     spawnedObject.transform.position = targetSpawnPoint;
+                    spawnerComponent.spawnedObjects.Add(spawnedObject);
                     NpcMovementController agent = spawnedObject.GetComponent<NpcMovementController>();
                     agent.SetPositions(spawnableComponent.navigationPoints);
                     spawnerComponent.currentSpawned++;
                     spawnableComponent.lastSpawnedAt = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+                }
+
+                if (shouldDespawned) {
+                    spawnerComponent.currentSpawned = 0;
+                    foreach (GameObject objectToDespawn in spawnerComponent.spawnedObjects) {
+                        GameObject.Destroy(objectToDespawn);
+                    }
                 }
             }
         }

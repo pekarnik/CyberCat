@@ -147,6 +147,7 @@ namespace Systems {
         private void AttackInputHandler (EcsWorld world) {
 
             if (Input.GetKeyDown(KeyCode.F)) {
+
                 var filter = world.Filter<Components.PhysicalObject>().Inc<Components.Attacker>().End();
                 var attackerPool = world.GetPool<Components.Attacker>();
                 

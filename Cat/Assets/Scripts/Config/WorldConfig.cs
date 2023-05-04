@@ -9,6 +9,7 @@ public static class Config {
          public static int UI = 5;
          public static int TERRAIN = 6;
          public static int PLAYER = 7;
+         public static int ENEMY = 10;
     }
 }
 

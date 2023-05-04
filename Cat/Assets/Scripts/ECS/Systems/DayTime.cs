@@ -2,6 +2,7 @@ using Client;
 using Components;
 using Leopotam.EcsLite;
 using UnityEngine;
+using EventManager;
 
 namespace Systems
 {
@@ -21,7 +22,8 @@ namespace Systems
             
             ref var dayTimeComponent = ref dayTimePool.Get(dayTimeEnitity);
 
-            dayTimeComponent.currentTime = 1;
+            dayTimeComponent.currentTime = 0;
+            dayTimeComponent.cycleDuration = 30;
 
         }
         public void Run(EcsSystems systems) {
@@ -30,8 +32,15 @@ namespace Systems
 
             ref Components.DayTime dayTimeComponent = ref dayTimePool.Get(dayTimeEnitity);
 
-            if (dayTimeComponent.currentTime + Time.deltaTime > maxTime) {
-                dayTimeComponent.currentTime = 1;
+            if (dayTimeComponent.currentTime + Time.deltaTime > dayTimeComponent.cycleDuration) {
+                dayTimeComponent.currentTime = 0;
+                DayTimeState currentState = 
+                    DayTimeEventManager.CurrentDayTimeState == DayTimeState.DAY 
+                    ? DayTimeState.NIGHT 
+                    : DayTimeState.DAY;
+
+                DayTimeEventManager.ChangeDayTime(currentState);
+
             } else {
                 dayTimeComponent.currentTime += Time.deltaTime;
             }
