@@ -35,7 +35,6 @@ namespace Client
                 .ConvertScene()
                 .Add(new Systems.KeyboardInput())
                 .Add(new Systems.DayLight())
-                .Add(new UserInterfaceHideSystem())
 #if UNITY_EDITOR
                 .Add(new Leopotam.EcsLite.UnityEditor.EcsWorldDebugSystem())
 #endif

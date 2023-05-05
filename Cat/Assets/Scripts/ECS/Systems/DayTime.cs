@@ -40,8 +40,8 @@ namespace Systems
                     : DayTimeState.DAY;
 
                 DayTimeEventManager.ChangeDayTime(currentState);
-
-            } else {
+            }
+            else {
                 dayTimeComponent.currentTime += Time.deltaTime;
             }
 
