@@ -21,9 +21,9 @@ namespace Assets.Scripts.MonoBehaviours.Player
         public void ChangeHealthCount(int value)
         {
             _currentHealth += value;
-            if (_currentHealth < 0)
+            if (_currentHealth <= 0)
             {
-                _currentHealth = 0;
+                Destroy(gameObject);
             }
             if (_currentHealth > _maxHealth)
             {
@@ -44,6 +44,7 @@ namespace Assets.Scripts.MonoBehaviours.Player
 
         private void CheckForNull()
         {
+#if UNITY_EDITOR
             try
             {
                 _healthView.IfNullThrowException();
@@ -52,6 +53,7 @@ namespace Assets.Scripts.MonoBehaviours.Player
             {
                 Debug.Log(e);
             }
+#endif
         }
 
         private void CheckValuesForCorrectness()

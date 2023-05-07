@@ -5,6 +5,8 @@ namespace Assets.Scripts.MonoBehaviours.Player
 {
     public class HudViewController : MonoBehaviour
     {
+        [SerializeField] private bool _startOnAwake = true;
+
         private void OnEnable()
         {
             DayTimeEventManager.SubscribeToDayTime(HideOrShowHud);
@@ -17,7 +19,10 @@ namespace Assets.Scripts.MonoBehaviours.Player
 
         public void Start()
         {
-            DayTimeEventManager.ChangeDayTime(DayTimeEventManager.CurrentDayTimeState);
+            if (_startOnAwake)
+            {
+                DayTimeEventManager.ChangeDayTime(DayTimeEventManager.CurrentDayTimeState);
+            }
         }
 
         private void HideOrShowHud(DayTimeState dayState)

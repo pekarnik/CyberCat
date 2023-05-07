@@ -1,15 +1,19 @@
 using UnityEngine;
 
-namespace Assets.Scripts.MonoBehaviours.Player
+namespace Assets.Scripts.MonoBehaviours.ChargeableItems
 {
     [RequireComponent(typeof(MeshRenderer))]
-    public class ChargeableItem : MonoBehaviour
+    public class ChargeableItemStateComponent : MonoBehaviour
     {
         [SerializeField] private Material _normalMaterial;
         [SerializeField] private Material _chargedMaterial;
 
         [SerializeField] private States _currentState;
         public States CurrentState => _currentState;
+
+        public delegate void StateChangedHandler(States state);
+
+        public event StateChangedHandler StateChanged;
 
         public enum States
         {
@@ -50,7 +54,12 @@ namespace Assets.Scripts.MonoBehaviours.Player
 
             _currentState = States.Charged;
 
-            _renderer.material = _chargedMaterial;
+            if (_chargedMaterial != null)
+            {
+                _renderer.material = _chargedMaterial;
+            }
+
+            OnStateChanged();
         }
 
         public void Discharge()
@@ -59,7 +68,17 @@ namespace Assets.Scripts.MonoBehaviours.Player
 
             _currentState = States.Normal;
 
-            _renderer.material = _normalMaterial;
+            if (_normalMaterial != null)
+            {
+                _renderer.material = _normalMaterial;
+            }
+
+            OnStateChanged();
+        }
+
+        private void OnStateChanged()
+        {
+            StateChanged?.Invoke(_currentState);
         }
 
         private MeshRenderer _renderer;

@@ -42,6 +42,15 @@
       "dependencies": {},
       "hash": "ea0ad960e3268b57964795594a7767305a1fb977"
     },
+    "com.unity.ai.navigation": {
+      "version": "1.0.0-exp.4",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.modules.ai": "1.0.0"
+      },
+      "url": "https://packages.unity.com"
+    },
     "com.unity.cinemachine": {
       "version": "2.8.9",
       "depth": 0,

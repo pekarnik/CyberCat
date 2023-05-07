@@ -1,5 +1,6 @@
 using Assets.Scripts.Extensions;
 using System;
+using Assets.Scripts.MonoBehaviours.ChargeableItems;
 using UnityEngine;
 
 namespace Assets.Scripts.MonoBehaviours.Player
@@ -66,9 +67,9 @@ namespace Assets.Scripts.MonoBehaviours.Player
 
             if (hittedCount <= 0) return;
 
-            if (!hitted[0].TryGetComponent<ChargeableItem>(out var chargeableItem)) return;
+            if (!hitted[0].TryGetComponent<ChargeableItemStateComponent>(out var chargeableItem)) return;
 
-            if(chargeableItem.CurrentState == ChargeableItem.States.Charged)
+            if(chargeableItem.CurrentState == ChargeableItemStateComponent.States.Charged)
             {
                 chargeableItem.Discharge();
                 ChangeEnergyCount(1);
