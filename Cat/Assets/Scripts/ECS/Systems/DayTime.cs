@@ -11,6 +11,17 @@ namespace Systems
         private int dayTimeEnitity;
         private float maxTime = 301f;
 
+        private float GetCurrentDuration (DayTimeState state, Components.DayTime dayTime) {
+            switch (state) {
+                case DayTimeState.DAY:
+                    return dayTime.dayDuration;
+                case DayTimeState.NIGHT:
+                    return dayTime.nightDuration;
+                default:
+                    return 30;
+            }
+        }
+
         public void Init(EcsSystems systems)
         {
             EcsWorld world = systems.GetWorld();
@@ -23,8 +34,8 @@ namespace Systems
             ref var dayTimeComponent = ref dayTimePool.Get(dayTimeEnitity);
 
             dayTimeComponent.currentTime = 0;
-            dayTimeComponent.cycleDuration = 10;
-
+            dayTimeComponent.nightDuration = 60;
+            dayTimeComponent.dayDuration = 20;
         }
         public void Run(EcsSystems systems) {
             EcsWorld world = systems.GetWorld();
@@ -32,7 +43,9 @@ namespace Systems
 
             ref Components.DayTime dayTimeComponent = ref dayTimePool.Get(dayTimeEnitity);
 
-            if (dayTimeComponent.currentTime + Time.deltaTime > dayTimeComponent.cycleDuration) {
+            float currentDuration = GetCurrentDuration(DayTimeEventManager.CurrentDayTimeState, dayTimeComponent);
+
+            if (dayTimeComponent.currentTime + Time.deltaTime > currentDuration) {
                 dayTimeComponent.currentTime = 0;
                 DayTimeState currentState = 
                     DayTimeEventManager.CurrentDayTimeState == DayTimeState.DAY 
