@@ -1,6 +1,8 @@
 using System;
+using Assets.Scripts.ECS.Components;
 using Assets.Scripts.Extensions;
 using UnityEngine;
+using Voody.UniLeo.Lite;
 
 namespace Assets.Scripts.MonoBehaviours.Player
 {
@@ -10,6 +12,8 @@ namespace Assets.Scripts.MonoBehaviours.Player
         
         [SerializeField] private int _maxHealth;
         [SerializeField] private int _currentHealth;
+
+        [SerializeField] private bool _isEntity = false;
 
         private void Awake()
         {
@@ -23,6 +27,11 @@ namespace Assets.Scripts.MonoBehaviours.Player
             _currentHealth += value;
             if (_currentHealth <= 0)
             {
+                if (_isEntity)
+                {
+                    DestroyEntity();
+                }
+
                 Destroy(gameObject);
             }
             if (_currentHealth > _maxHealth)
@@ -31,6 +40,14 @@ namespace Assets.Scripts.MonoBehaviours.Player
             }
 
             SetHealthInViewIfViewNotNull();
+        }
+
+        private void DestroyEntity()
+        {
+            if (TryGetComponent<EntityReference>(out var entityReference))
+            {
+                WorldHandler.GetMainWorld().DelEntity(entityReference.Entity);
+            }
         }
 
         private void SetHealthInViewIfViewNotNull()

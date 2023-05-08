@@ -26,11 +26,12 @@ namespace Client
             
             _initSystems
                 .Add(new Systems.InitPlayer())
+                .Add(new Systems.EntityInitializeSystem())
                 // .Add(new Systems.InitNpc())
                 .Add(new Systems.InitLight())
                 // .Add(new Systems.InitCamera())
                 .Init();
-            
+
             _systems
                 .Add(new Systems.KeyboardInput())
                 .Add(new Systems.DayLight())
