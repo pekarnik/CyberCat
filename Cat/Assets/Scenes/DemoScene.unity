@@ -7617,7 +7617,7 @@ MonoBehaviour:
     spawnLimit: 15
     active: 1
     currentSpawned: 0
-    activePhase: 0
+    activePhase: 2
     spawnedObjects: []
 --- !u!114 &370984423
 MonoBehaviour:
@@ -11193,7 +11193,7 @@ MonoBehaviour:
     spawnLimit: 15
     active: 1
     currentSpawned: 0
-    activePhase: 0
+    activePhase: 2
     spawnedObjects: []
 --- !u!114 &846014379
 MonoBehaviour:
@@ -20369,7 +20369,7 @@ MonoBehaviour:
     spawnLimit: 15
     active: 1
     currentSpawned: 0
-    activePhase: 0
+    activePhase: 2
     spawnedObjects: []
 --- !u!114 &1591200805
 MonoBehaviour:
