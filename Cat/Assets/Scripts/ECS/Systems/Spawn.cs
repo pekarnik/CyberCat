@@ -16,7 +16,6 @@ namespace Systems {
         public void Init (EcsSystems systems) {
             var world = systems.GetWorld();
 
-            var spawnablePool = world.GetPool<Components.Spawnable>();
             var spawnerFilter = world.Filter<Components.Spawner>().End();
             var spawnerPool = world.GetPool<Components.Spawner>();
 
@@ -29,7 +28,6 @@ namespace Systems {
 
             foreach (var entry in spawners) {
                 ref var spawnerComponent = ref spawnerPool.Get(entry.Value);
-
 
                 GameObject spawnerPath = spawnerComponent.spawnerPathObject;
                 List<Transform> spawnerPathPoints = spawnerPath.GetComponentsInChildren<Transform>().ToList();

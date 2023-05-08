@@ -23,7 +23,7 @@ namespace Systems
             ref var dayTimeComponent = ref dayTimePool.Get(dayTimeEnitity);
 
             dayTimeComponent.currentTime = 0;
-            dayTimeComponent.cycleDuration = 30;
+            dayTimeComponent.cycleDuration = 10;
 
         }
         public void Run(EcsSystems systems) {
