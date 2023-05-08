@@ -32,7 +32,6 @@ namespace Client
                 .Init();
             
             _systems
-                .ConvertScene()
                 .Add(new Systems.KeyboardInput())
                 .Add(new Systems.DayLight())
 #if UNITY_EDITOR

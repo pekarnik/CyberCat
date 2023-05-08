@@ -10,17 +10,6 @@ using EventManager;
 namespace Systems {
 
     sealed class Spawn : IEcsRunSystem, IEcsInitSystem {
-        
-        private SpawnableConfig[] spawnables = {
-            new SpawnableConfig(
-                "Prefabs/Enemies/Enemy",
-                "SPAWNER_1",
-                "SPAWNER_1_PATH",
-                2,
-                1,
-                true
-            )
-        };
 
         private Dictionary<string, int> spawners = new Dictionary<string, int>();
 
@@ -38,13 +27,9 @@ namespace Systems {
                 }
             }
 
-            foreach (SpawnableConfig entry in spawnables) {
-                var entity = world.NewEntity();
-                
-                spawnablePool.Add(entity);
-                spawners.TryGetValue(entry.spawnerId, out int spawnerEntity);
-                var spawnerComponent = spawnerPool.Get(spawnerEntity);
-                ref var spawnableComponent = ref spawnablePool.Get(entity);
+            foreach (var entry in spawners) {
+                ref var spawnerComponent = ref spawnerPool.Get(entry.Value);
+
 
                 GameObject spawnerPath = spawnerComponent.spawnerPathObject;
                 List<Transform> spawnerPathPoints = spawnerPath.GetComponentsInChildren<Transform>().ToList();
@@ -61,27 +46,25 @@ namespace Systems {
 
                 var points = sortedPathPoints;
                 
-                spawnableComponent.navigationPoints = points.ToArray();
-                spawnableComponent.spawnerEntity = spawnerEntity;
-                spawnableComponent.lastSpawnedAt = null;
+                spawnerComponent.navigationPoints = points.ToArray();
+                spawnerComponent.lastSpawnedAt = null;
             }
         }
 
         public void Run (EcsSystems systems)
         {
             EcsWorld world = systems.GetWorld();
-            var filter = world.Filter<Components.Spawnable>().End();
+            var filter = world.Filter<Components.Spawner>().End();
             var spawnablePool = world.GetPool<Components.Spawnable>();
             var spawnerPool = world.GetPool<Components.Spawner>();
 
             foreach (var entity in filter) {
-                ref var spawnableComponent = ref spawnablePool.Get(entity);
-                ref var spawnerComponent = ref spawnerPool.Get(spawnableComponent.spawnerEntity);
+                ref var spawnerComponent = ref spawnerPool.Get(entity);
 
                 bool isDayTimePhaseActive = (spawnerComponent.activePhase == DayTimeEventManager.CurrentDayTimeState || spawnerComponent.activePhase == DayTimeState.NONE);
                 bool isSpawnLimitReached = ((spawnerComponent.currentSpawned < spawnerComponent.spawnLimit && spawnerComponent.spawnLimit > 0) || spawnerComponent.spawnLimit == 0);
-                bool isSpawnTimeoutReached = ((DateTimeOffset.UtcNow.ToUnixTimeSeconds() - spawnableComponent.lastSpawnedAt > spawnerComponent.spawnInterval)
-                    || spawnableComponent.lastSpawnedAt == null);
+                bool isSpawnTimeoutReached = ((DateTimeOffset.UtcNow.ToUnixTimeSeconds() - spawnerComponent.lastSpawnedAt > spawnerComponent.spawnInterval)
+                    || spawnerComponent.lastSpawnedAt == null);
 
                 bool ableToSpawn = isSpawnTimeoutReached && isSpawnLimitReached && isDayTimePhaseActive && spawnerComponent.active;
 
@@ -93,10 +76,10 @@ namespace Systems {
                     GameObject spawnedObject = GameObject.Instantiate(spawnerComponent.spawnObject, targetSpawnPoint, Quaternion.Euler(0, 0, 0));
                     spawnedObject.transform.position = targetSpawnPoint;
                     spawnerComponent.spawnedObjects.Add(spawnedObject);
-                    NpcMovementController agent = spawnedObject.GetComponent<NpcMovementController>();
-                    agent.SetPositions(spawnableComponent.navigationPoints);
+                    NpcMovementController agent = spawnedObject.GetComponent<NpcMovementController>();;
+                    agent.SetPositions(spawnerComponent.navigationPoints);
                     spawnerComponent.currentSpawned++;
-                    spawnableComponent.lastSpawnedAt = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+                    spawnerComponent.lastSpawnedAt = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
                 }
 
                 if (shouldDespawned) {

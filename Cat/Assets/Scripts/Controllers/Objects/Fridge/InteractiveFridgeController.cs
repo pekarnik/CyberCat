@@ -16,10 +16,6 @@ namespace Assets.Scripts.Controllers.Objects.Fridge {
                 _view?.UpdateMaxProductCount(maxAvailableInteractions);
         }
 
-        // void DayTimeChanged(DayTimeState state) {
-        //     Debug.Log(state);
-        // }
-
         private InteractiveFridgeView _view;
 
         public override bool Interact() {

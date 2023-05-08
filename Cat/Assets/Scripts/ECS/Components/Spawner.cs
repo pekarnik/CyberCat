@@ -23,5 +23,9 @@ namespace Components {
         public DayTimeState activePhase;
 
         public List<GameObject> spawnedObjects;
+
+        public PathPointModel[] navigationPoints;
+
+        public long? lastSpawnedAt;
     }
 }
