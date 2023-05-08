@@ -51,7 +51,7 @@ namespace Assets.Scripts.MonoBehaviours.Player
             }
             catch (NullReferenceException e)
             {
-                Debug.Log(e);
+                //Debug.Log(e);
             }
 #endif
         }

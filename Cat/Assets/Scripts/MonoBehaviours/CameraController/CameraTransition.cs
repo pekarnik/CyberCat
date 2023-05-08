@@ -86,6 +86,8 @@ namespace Assets.Scripts.MonoBehaviours.CameraController
 
         private void SetActiveCamera(CinemachineVirtualCamera camera)
         {
+            if (_mainCamera.ActiveVirtualCamera == null) return;
+
             _mainCamera.ActiveVirtualCamera.Priority = 10;
             camera.Priority = 50;
         }
