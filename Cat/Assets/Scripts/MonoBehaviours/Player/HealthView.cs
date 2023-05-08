@@ -28,11 +28,6 @@ namespace Assets.Scripts.MonoBehaviours.Player
             }
         }
 
-        void ChangeDayTime(DayTimeState state) {
-            Debug.Log(state.ToString());
-        }
-
-
         private void Awake()
         {
             CheckForNull();
@@ -44,8 +39,6 @@ namespace Assets.Scripts.MonoBehaviours.Player
             {
                 Debug.LogError("Count of health parts images not equal to max health");
             }
-
-            EventManager.DayTimeEventManager.SubscribeToDayTime(ChangeDayTime);
         }
 
         private void UpdateHealthBar()
