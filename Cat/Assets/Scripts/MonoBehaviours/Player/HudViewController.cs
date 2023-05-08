@@ -7,18 +7,10 @@ namespace Assets.Scripts.MonoBehaviours.Player
     {
         [SerializeField] private bool _startOnAwake = true;
 
-        private void OnEnable()
-        {
-            DayTimeEventManager.SubscribeToDayTime(HideOrShowHud);
-        }
-
-        private void OnDisable()
-        {
-            DayTimeEventManager.UnsubscribeFromDayTime(HideOrShowHud);
-        }
-
         public void Start()
         {
+            DayTimeEventManager.SubscribeToDayTime(HideOrShowHud);
+
             if (_startOnAwake)
             {
                 DayTimeEventManager.ChangeDayTime(DayTimeEventManager.CurrentDayTimeState);
