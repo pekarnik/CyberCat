@@ -45,7 +45,7 @@ namespace Assets.Scripts.MonoBehaviours.Player
                 Debug.LogError("Count of health parts images not equal to max health");
             }
 
-            DayTimeEventManager.SubscribeToDayTime(ChangeDayTime);
+            EventManager.DayTimeEventManager.SubscribeToDayTime(ChangeDayTime);
         }
 
         private void UpdateHealthBar()
