@@ -1,12 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
+using Assets.Scripts.MonoBehaviours.ChargeableItems;
 using UnityEngine.AI;
 
 public class MimicMovementController : MonoBehaviour
 {
     NavMeshAgent _agent;
-    Assets.Scripts.MonoBehaviours.ChargeableItems.ChargeableItemStateComponent[] _targets;
-    Assets.Scripts.MonoBehaviours.ChargeableItems.ChargeableItemStateComponent _curTarget;
+    Assets.Scripts.MonoBehaviours.ChargeableItems.Subject[] _targets;
+    Assets.Scripts.MonoBehaviours.ChargeableItems.Subject _curTarget;
     NavMeshPath _path;
     bool _alreadyChoosed = false;
     ParticleSystem _pSystem;
@@ -23,7 +24,7 @@ public class MimicMovementController : MonoBehaviour
     {
         _path = new NavMeshPath();
         _agent = GetComponent<NavMeshAgent>();
-        _targets = FindObjectsOfType<Assets.Scripts.MonoBehaviours.ChargeableItems.ChargeableItemStateComponent>();
+        _targets = FindObjectsOfType<Assets.Scripts.MonoBehaviours.ChargeableItems.Subject>();
         _pSystem = GetComponent<ParticleSystem>();
         _animator = GetComponent<Animator>();
         
@@ -57,6 +58,7 @@ public class MimicMovementController : MonoBehaviour
                 if(_curTimeToDie > _timeToDie)
                 {
                     Debug.Log("ZARAZA");
+                    _curTarget.ChangeState(SubjectStateComponent.States.Captured);
                     Destroy(gameObject);
                 }
                 _curTimeToDie += Time.deltaTime;
@@ -83,4 +85,6 @@ public class MimicMovementController : MonoBehaviour
             _hideMesh.SetActive(false);
         }
     }
+
+    private Collider[] _hittedColliders = new Collider[15];
 }

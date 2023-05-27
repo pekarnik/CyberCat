@@ -1,10 +1,11 @@
 using System.Collections;
+using Assets.Scripts.MonoBehaviours.ChargeableItems.Interfaces;
 using Assets.Scripts.MonoBehaviours.Player;
 using UnityEngine;
 
-namespace Assets.Scripts.MonoBehaviours.ChargeableItems
+namespace Assets.Scripts.MonoBehaviours.ChargeableItems.Abilities
 {
-    public class ChargeableItemAttackComponent : MonoBehaviour
+    public class LampAttackComponent : MonoBehaviour, IChargedAbility
     {
         [SerializeField] private int _damage = 1;
         [SerializeField] private float _attackDelay = 3;
@@ -13,15 +14,17 @@ namespace Assets.Scripts.MonoBehaviours.ChargeableItems
 
         [SerializeField] private Transform _trackingComponent;
 
-        public void StartAttack()
+        public void Execute()
         {
             _hittedCount = GetEnemiesOnAttackRange();
             _isAttacking = true;
 
+            Debug.Log("Лампа начала атаковать!");
+
             StartCoroutine(nameof(StartAttackEnemy));
         }
 
-        public void StopAttack()
+        public void Stop()
         {
             _hittedCount = 0;
             _isAttacking = false;

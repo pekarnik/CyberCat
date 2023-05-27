@@ -12036,6 +12036,17 @@ Mesh:
     offset: 0
     size: 0
     path: 
+--- !u!114 &963485346 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1245182203059795904, guid: efae5846a9580874caa67732d79710c3, type: 3}
+  m_PrefabInstance: {fileID: 1827143799729631549}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e41c2ebd048decb40820514d6ee9a8fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!223 &978616498 stripped
 Canvas:
   m_CorrespondingSourceObject: {fileID: 2809200666774971992, guid: 6fdd46ddec85547fcae327c172ee8b5b, type: 3}
@@ -19811,7 +19822,6 @@ GameObject:
   - component: {fileID: 1552852128}
   - component: {fileID: 1552852127}
   - component: {fileID: 1552852126}
-  - component: {fileID: 1552852125}
   m_Layer: 9
   m_Name: ChargeableCube
   m_TagString: Untagged
@@ -19819,21 +19829,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 0
---- !u!114 &1552852125
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1552852124}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 08af8e102dbca3b4fb75eb11f52c4c9a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _normalMaterial: {fileID: 2100000, guid: 67157dea1320447db8737afabdb5015d, type: 2}
-  _chargedMaterial: {fileID: 2100000, guid: 7bbd6149883e9224cb56f316cadb743c, type: 2}
-  _currentState: 0
 --- !u!65 &1552852126
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -24562,6 +24557,18 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4698450637795449295, guid: efae5846a9580874caa67732d79710c3, type: 3}
+      propertyPath: _chargedMonoAbility.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4698450637795449295, guid: efae5846a9580874caa67732d79710c3, type: 3}
+      propertyPath: _capturedMonoAbility.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4698450637795449295, guid: efae5846a9580874caa67732d79710c3, type: 3}
+      propertyPath: _chargedMonoAbility.Array.data[0]
+      value: 
+      objectReference: {fileID: 963485346}
     - target: {fileID: 5685409980075716321, guid: efae5846a9580874caa67732d79710c3, type: 3}
       propertyPath: m_IsActive
       value: 0
