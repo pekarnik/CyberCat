@@ -14,6 +14,7 @@ namespace Systems {
             AttackInputHandler(world);
             JumpPlayerHandler(world);
             CameraPositionChangeHandler(world);
+            MovePlayerDirection(world);
         }
 
         private void MovableHandler (EcsWorld world) {
@@ -33,6 +34,46 @@ namespace Systems {
 
                 movableComponent.moveSpeed = Components.Movable.DEFAULT_MOVE_SPEED;
             }
+        }
+
+        private void MovePlayerDirection (EcsWorld world) {
+            var filter = world.Filter<Components.MovePlayerDirection>().End();
+            var movePlayerDirectionPool = world.GetPool<Components.MovePlayerDirection>();
+
+            foreach (var entity in filter) {
+                ref var movePlayerDirectionComponent = ref movePlayerDirectionPool.Get(entity);
+                Vector2 current = new Vector2(Input.GetAxisRaw("Vertical"), -Input.GetAxisRaw("Horizontal"));
+
+                if (movePlayerDirectionComponent.current != current && current != new Vector2(0, 0)) {
+                    movePlayerDirectionComponent.old = movePlayerDirectionComponent.current;
+                    movePlayerDirectionComponent.current = current;
+
+                    float cosin = (movePlayerDirectionComponent.old.x * current.x) + (movePlayerDirectionComponent.old.y * current.y);
+                    float modAb = Module(movePlayerDirectionComponent.old) * Module(current);
+                    float vectCos = cosin/modAb;
+
+                    float sin = (movePlayerDirectionComponent.old.y * current.x) - (movePlayerDirectionComponent.old.x * current.y);
+                    // Debug.Log("SIN " + sin);
+                    float vectSin = sin/modAb;
+
+                    float acos = Mathf.Acos(vectCos);
+
+                    float angle = 0;
+
+                    if (vectSin < 0) {
+                        angle = (Mathf.Rad2Deg * -acos) % 360;
+                    } else {
+                        angle = (Mathf.Rad2Deg * acos);
+                    }
+
+                    movePlayerDirectionComponent.currentAngle = angle;
+                }
+            }
+
+        }
+
+        private float Module(Vector2 vector) {
+            return Mathf.Pow(Mathf.Pow(vector.x, 2) + Mathf.Pow(vector.y, 2), 0.5f);
         }
 
         private void RotateCameraHandler (EcsWorld world) {

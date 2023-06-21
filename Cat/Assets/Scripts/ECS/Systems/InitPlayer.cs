@@ -20,6 +20,7 @@ namespace Systems {
             var attackerPool = world.GetPool<Components.Attacker>();
             var animatorPool = world.GetPool<AnimatorComponent>();
             var initializeEntityRequestPool = world.GetPool<InitializeEntityRequestComponent>();
+            var movePlayerDirectionPool = world.GetPool<MovePlayerDirection>();
 
             movablePool.Add(playerEntity);
             moveDirectionPool.Add(playerEntity);
@@ -29,6 +30,7 @@ namespace Systems {
             jumpPlayerPool.Add(playerEntity);
             animatorPool.Add(playerEntity);
             initializeEntityRequestPool.Add(playerEntity);
+            movePlayerDirectionPool.Add(playerEntity);
 
             ref var movableComponent = ref movablePool.Get(playerEntity);
             ref var cameraLeadComponent = ref cameraLeadPool.Get(playerEntity);
@@ -37,6 +39,7 @@ namespace Systems {
             ref var jumpPlayerComponent = ref jumpPlayerPool.Get(playerEntity);
             ref var animatorComponent = ref animatorPool.Get(playerEntity);
             ref var initializeEntityRequestComponent = ref initializeEntityRequestPool.Get(playerEntity);
+            ref var movePlayerDirectionComponent = ref movePlayerDirectionPool.Get(playerEntity);
 
             cameraLeadComponent.leaderTag = "Player";
             GameObject player = GameObject.FindGameObjectWithTag("Player");
@@ -47,6 +50,11 @@ namespace Systems {
             jumpPlayerComponent.jumpHeight = 10.0f;
             animatorComponent.Animator = player.GetComponentInChildren<Animator>();
             initializeEntityRequestComponent.EntityReference = player.GetComponent<EntityReference>();
+            movePlayerDirectionComponent.current = new Vector2(1, 0);
+            movePlayerDirectionComponent.old = new Vector2(1, 0);
+            movePlayerDirectionComponent.transform = player.transform;
+            movePlayerDirectionComponent.currentAngle = 0;
+            movePlayerDirectionComponent.oldAngle = 0;
         }
     }
 }
